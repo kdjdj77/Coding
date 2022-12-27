@@ -62,7 +62,24 @@ import java.io.*;
 
 class Solution {
     public int solution(int[][] board, int[][] skill) {
-        int answer = 0;
-        return answer;
+    	int res = board.length * board[0].length;
+        for(int i = 0; i < skill.length; i++) {
+        	int type = skill[i][0] == 1 ? -1 : 1;
+        	int x1 = skill[i][1], x2 = skill[i][3];
+        	int y1 = skill[i][2], y2 = skill[i][4];
+        	int degree = skill[i][5];
+        	
+        	for(int x = x1; x <= x2; x++) {
+        		for(int y = y1; y <= y2; y++) {
+        			int a = board[x][y];
+        			int b = a + degree * type;
+        			
+        			if (a > 0 && b <= 0) res--;
+        			else if (a <= 0 && b > 0) res++;
+        			board[x][y] = b;
+        		}
+        	}
+        }
+        return res;
     }
 }

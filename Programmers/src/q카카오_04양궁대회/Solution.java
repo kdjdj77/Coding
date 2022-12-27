@@ -40,8 +40,32 @@ import java.util.*;
 import java.io.*;
 
 class Solution {
-    public int[] solution(int n, int[] info) {
-        int[] answer = {};
-        return answer;
+	static int[] a, res;
+	public static void main(String args[]) {
+		int n; int[] info;
+		n = 5; info = new int[] {2,1,1,1,0,0,0,0,0,0,0};
+		print(solution(n, info));
+		n = 1; info = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+		print(solution(n, info));
+		n = 9; info = new int[] {0,0,1,2,0,1,1,1,1,1,1};
+		print(solution(n, info));
+		n = 10; info = new int[] {0,0,0,0,0,0,0,0,3,4,3};
+		print(solution(n, info));
+	}
+	public static void print(int[] a) {
+    	System.out.print("[" + a[0]);
+    	for(int i = 1; i < a.length; i++) System.out.print(", " + a[i]);
+    	System.out.println("]");
+    }
+    public static int[] solution(int n, int[] info) {
+    	a = info;
+    	res = new int[11];
+    	f(n, 0);
+    	
+    	
+    	return res;
+    }
+    public static void f(int n, int depth) {
+    	
     }
 }

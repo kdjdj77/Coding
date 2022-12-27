@@ -11,34 +11,74 @@ package q28_최단경로.a01_1753;
 */
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+class Node implements Comparable<Node>{
+    int y, w;
+    public Node(int y, int w) {
+    	this.y = y; this.w = w; 
+	}
+    @Override
+    public int compareTo(Node n) {
+    	return w - n.w;
+    }
+}
+
 public class Main {
-	static int V, E, K;
-	static int[][] dp;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		V = Integer.parseInt(st.nextToken());
-		E = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(br.readLine());
-		
-		dp = new int[V+1][V+1];
-		for (int i = 1; i <= E; i++) {
-			st = new StringTokenizer(br.readLine());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-			int w = Integer.parseInt(st.nextToken());
-			dp[x][y] = w; dp[y][x] = w;
-		}
-		dijkstra();
-		
-	}
-	public static void dijkstra() {
-		
-	}
+    static int V, E, K, INF = Integer.MAX_VALUE;
+    static ArrayList<ArrayList<Node>> list = new ArrayList<>();;
+    static int[] dp;
+
+    public static void main(String[] args) throws IOException {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(br.readLine());
+        dp = new int[V+1];
+
+        Arrays.fill(dp, INF);
+
+        for(int i = 0; i <= V; i++) list.add(new ArrayList<>());
+        for(int i = 0 ; i < E; i++){
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            list.get(x).add(new Node(y, w));
+        }
+        dijkstra(K);
+        for(int i = 1; i <= V; i++) 
+        	sb.append(dp[i] == INF ? "INF" : dp[i]).append("\n");
+
+        System.out.print(sb);
+    }
+
+    private static void dijkstra(int s){
+       PriorityQueue<Node> q = new PriorityQueue<>();
+       boolean[] visit = new boolean[V + 1];
+       q.add(new Node(s, 0));
+       dp[s] = 0;
+
+       while(!q.isEmpty()){
+           Node curNode = q.poll();
+           int cur = curNode.y;
+           if(visit[cur]) continue;
+           
+           visit[cur] = true;
+           for(Node n : list.get(cur)){
+               if(dp[n.y] > dp[cur] + n.w) {
+                   dp[n.y] = dp[cur] + n.w;
+                   q.add(new Node(n.y, dp[n.y]));
+               }
+           }
+       }
+    }
 }
