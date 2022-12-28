@@ -15,16 +15,12 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		Long test = s.nextLong();
-		Long start = 1L;
-		Long move = 0L;
-		
-		while(start + move * 6 < test) {
-			start = start + move * 6;
-			move++;
-		}
-		System.out.println(move + 1);
-		s.close();
+		Scanner sc = new Scanner(System.in);
+		int a = sc.nextInt();
+		int s = 1, n = 0;
+		 
+		while(s + n*6 < a) s += 6*n++;
+		System.out.print(++n);
+		sc.close();
 	}
 }

@@ -57,17 +57,15 @@ type이 2이면 degree만큼 건물의 내구도를 높입니다.
 주어진 조건 외 추가 제한사항 없습니다.
 */
 
-import java.util.*;
-import java.io.*;
 
 class Solution {
     public int solution(int[][] board, int[][] skill) {
     	int res = board.length * board[0].length;
-        for(int i = 0; i < skill.length; i++) {
-        	int type = skill[i][0] == 1 ? -1 : 1;
-        	int x1 = skill[i][1], x2 = skill[i][3];
-        	int y1 = skill[i][2], y2 = skill[i][4];
-        	int degree = skill[i][5];
+        for(int[] sk : skill) {
+        	int type = sk[0] == 1 ? -1 : 1;
+        	int x1 = sk[1], x2 = sk[3];
+        	int y1 = sk[2], y2 = sk[4];
+        	int degree = sk[5];
         	
         	for(int x = x1; x <= x2; x++) {
         		for(int y = y1; y <= y2; y++) {

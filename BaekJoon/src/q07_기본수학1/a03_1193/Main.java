@@ -23,16 +23,16 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-		Long test = s.nextLong(); s.close();
-		Long sum = 1L;
+		int test = s.nextInt(); s.close();
+		int sum = 1;
 		int i;
 		for(i = 1;; i++) {
 			sum += i;
 			if (sum > test) break;
 		}
-		Long a = sum - test;
-		Long b = i - a + 1;
-		if (i % 2 == 0) System.out.println(b + "/" + a);
-		else System.out.println(a + "/" + b);
+		int a = sum - test;
+		int b = i - a + 1;
+		if (i % 2 == 0) System.out.print(b + "/" + a);
+		else System.out.print(a + "/" + b);
 	}
 }
