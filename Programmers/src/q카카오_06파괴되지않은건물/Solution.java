@@ -60,24 +60,30 @@ type이 2이면 degree만큼 건물의 내구도를 높입니다.
 
 class Solution {
     public int solution(int[][] board, int[][] skill) {
-    	int res = board.length * board[0].length;
+    	int a = board.length, b = board[0].length;
+    	int res = 0;
+    	int[][] dp = new int[a+1][b+1];
+    	
         for(int[] sk : skill) {
         	int type = sk[0] == 1 ? -1 : 1;
-        	int x1 = sk[1], x2 = sk[3];
-        	int y1 = sk[2], y2 = sk[4];
-        	int degree = sk[5];
-        	
-        	for(int x = x1; x <= x2; x++) {
-        		for(int y = y1; y <= y2; y++) {
-        			int a = board[x][y];
-        			int b = a + degree * type;
-        			
-        			if (a > 0 && b <= 0) res--;
-        			else if (a <= 0 && b > 0) res++;
-        			board[x][y] = b;
-        		}
+        	int x1 = sk[1]+1, x2 = sk[3]+1;
+        	int y1 = sk[2]+1, y2 = sk[4]+1;
+        	int val = sk[5] * type;
+        	dp[x1][y1] += val;
+        	if (y2+1 < b) dp[x1][y2+1] -= val;
+        	if (x2+1 < a) dp[x2+1][y1] -= val;
+        	if (x2+1 < a && y2+1 < b) dp[x2+1][y2+1] -= val;
+        }
+        for(int i = 1; i <= a; i++) {
+        	for(int j = 1; j <= b; j++) {
+        		board[i][j] += dp[i][j] += dp[i][j-1] + dp[i-1][j];
+        		if (board[i][j] > 0) res++;
         	}
         }
         return res;
     }
 }
+
+
+
+

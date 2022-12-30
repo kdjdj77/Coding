@@ -24,7 +24,7 @@ class Node{
     }
 }
 public class Main {
-    static final int INF = 50000000;
+    static final int INF = 70000000;
     static int N, M;
     static int[] dp;
     static Node[] A;
