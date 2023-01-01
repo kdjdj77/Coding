@@ -24,9 +24,9 @@ class Node{
     }
 }
 public class Main {
-    static final int INF = 70000000;
+    static final int INF = 1000000000;
     static int N, M;
-    static int[] dp;
+    static long[] dp;
     static Node[] A;
 
     public static void main(String[] args) throws IOException {
@@ -37,8 +37,8 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        A = new Node[M+1];
-        dp = new int[N+1];
+        A = new Node[M];
+        dp = new long[N+1];
         Arrays.fill(dp, INF);
 
         for(int i = 0; i < M; i++){
@@ -60,7 +60,7 @@ public class Main {
             for(int j = 0; j < M; j++){
                 Node n = A[j];
                 if(dp[n.s] != INF && dp[n.e] > dp[n.s] + n.w) {
-                	if (i != N-1) dp[n.e] = dp[n.s] + n.w;
+                	if (i < N-1) dp[n.e] = dp[n.s] + n.w;
                 	else return false;
                 }
             }
