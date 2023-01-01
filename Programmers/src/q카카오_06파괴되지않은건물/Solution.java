@@ -58,32 +58,25 @@ type이 2이면 degree만큼 건물의 내구도를 높입니다.
 */
 
 
-class Solution {
-    public int solution(int[][] board, int[][] skill) {
-    	int a = board.length, b = board[0].length;
-    	int res = 0;
-    	int[][] dp = new int[a+1][b+1];
-    	
-        for(int[] sk : skill) {
-        	int type = sk[0] == 1 ? -1 : 1;
-        	int x1 = sk[1]+1, x2 = sk[3]+1;
-        	int y1 = sk[2]+1, y2 = sk[4]+1;
-        	int val = sk[5] * type;
-        	dp[x1][y1] += val;
-        	if (y2+1 < b) dp[x1][y2+1] -= val;
-        	if (x2+1 < a) dp[x2+1][y1] -= val;
-        	if (x2+1 < a && y2+1 < b) dp[x2+1][y2+1] -= val;
+class Solution { 
+    public static int solution(int[][] board, int[][] skill) {
+        int a = board.length, b = board[0].length, res = 0;
+
+        int[][] dp = new int[a+1][b+1];
+        for (int[] s : skill) {
+            int y1 = s[1], x1 = s[2];
+            int y2 = s[3], x2 = s[4];
+            int degree = s[5] * (s[0] == 1 ? -1 : 1);
+            dp[y1][x1] += degree;
+            dp[y1][x2+1] -= degree;
+            dp[y2+1][x1] -= degree;
+            dp[y2+1][x2+1] += degree;
         }
-        for(int i = 1; i <= a; i++) {
-        	for(int j = 1; j <= b; j++) {
-        		board[i][j] += dp[i][j] += dp[i][j-1] + dp[i-1][j];
-        		if (board[i][j] > 0) res++;
-        	}
+        for (int y = 1; y < a; y++) for (int x = 0; x < b; x++) dp[y][x] += dp[y-1][x];
+        for (int x = 1; x < b; x++) for (int y = 0; y < a; y++) dp[y][x] += dp[y][x-1];
+        for (int i = 0; i < a; i++) for (int j = 0; j < b; j++) {
+        	if (board[i][j] + dp[i][j] > 0) res++;
         }
         return res;
     }
 }
-
-
-
-
