@@ -18,33 +18,35 @@ package q29_투포인터.a04_1644;
 첫째 줄에 자연수 N을 연속된 소수의 합으로 나타낼 수 있는 경우의 수를 출력한다.
 */
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
- 
-public class Main {
-	static boolean prime[];
-	static ArrayList<Integer> p = new ArrayList<>();
-	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt(); sc.close();
 
-        prime = new boolean[N+1]; 
+public class Main {	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        boolean[] notPrime = new boolean[N+1];
+        ArrayList<Integer> p = new ArrayList<>();
         
-        prime[0] = prime[1] = true;
-        for(int i = 4; i <= N; i += 2) prime[i] = true; 
-        for(int i = 3; i <= Math.sqrt(N); i++){
-            if (!prime[i]) for(int j = i*i; j <= N; j += i*2) prime[j] = true;                
+        notPrime[0] = notPrime[1] = true;
+        for(int i = 4; i <= N; i += 2) notPrime[i] = true; 
+        for(int i = 3; i <= Math.sqrt(N); i++) {
+            if (!notPrime[i])
+            	for(int j = i*i; j <= N; j += i*2)
+            		notPrime[j] = true;                
         }
-        for(int i = 1; i <= N; i++) if (!prime[i]) p.add(i);
+        for(int i = 1; i <= N; i++) if (!notPrime[i]) p.add(i);
 
-        int s=0, e=0, sum=0, res=0;
+        int s = 0, e = 0, sum = 0, res = 0;
         while(true) {
-        	if(sum >= N ) sum -= p.get(s++);
+        	if(sum >= N) sum -= p.get(s++);
         	else if(e == p.size()) break;
         	else sum += p.get(e++);       	
         	if(N == sum) res++;        	
         }		
-        System.out.println(res);	
+        System.out.print(res);	
     }	
 }
