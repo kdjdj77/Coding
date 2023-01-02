@@ -22,24 +22,25 @@ X가 2로 나누어 떨어지면, 2로 나눈다.
 import java.io.*;
 import java.util.*;
  
-public class Main {
+public class Main {	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
-		StringTokenizer st;
-
+		int N = Integer.parseInt(br.readLine());
+		int[] dp = new int[N+1];
+		ArrayList<Integer> path = new ArrayList<>();
+		
+		Queue<Integer> q = new LinkedList<>();
+		q.add(1);
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			if (cur == N) break; 
+			for(int a : new int[] {cur+1, cur*2, cur*3})
+				if (a <= N && dp[a] == 0) { dp[a] = cur; q.add(a); }
+		}
+		while(N != 0) { path.add(N); N = dp[N]; }
+		sb.append(path.size()-1).append("\n");
+		for(int a : path) sb.append(a).append(" ");
+		System.out.print(sb);
 	}
 }
-
-/*
-예제 입력 1 
-2
-예제 출력 1 
-1
-2 1
-예제 입력 2 
-10
-예제 출력 2 
-3
-10 9 3 1
-*/

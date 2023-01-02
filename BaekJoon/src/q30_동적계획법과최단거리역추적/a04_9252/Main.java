@@ -16,21 +16,32 @@ LCS가 여러 가지인 경우에는 아무거나 출력하고, LCS의 길이가
 */
 
 import java.io.*;
-import java.util.*;
  
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
-		StringTokenizer st;
-
+		String str1 = br.readLine(), str2 = br.readLine();
+		int a = str1.length(), b = str2.length();
+		
+		int[][] lcs = new int[a+1][b+1];
+		for(int i = 0; i < a; i++) {
+			for(int j = 0; j < b; j++) {
+				if(str1.charAt(i) == str2.charAt(j)) lcs[i+1][j+1] = lcs[i][j] + 1;	 
+				else lcs[i+1][j+1] = Math.max(lcs[i][j+1], lcs[i+1][j]);
+			}
+		}
+		int res = lcs[a][b];
+		sb.append(res).append("\n");
+		if (res > 0) {
+			char[] s = new char[res+1];
+			while(a != 0 && b != 0) {
+				if(lcs[a-1][b] == lcs[a][b]) a--;
+				else if(lcs[a][b-1] == lcs[a][b]) b--;
+				else if(str1.charAt(--a) == str2.charAt(--b)) s[--res] = str1.charAt(a);
+			}
+			for(char c : s) sb.append(c);
+		}
+		System.out.print(sb);
 	}
 }
-/*
-예제 입력 1 
-ACAYKP
-CAPCAK
-예제 출력 1 
-4
-ACAK
-*/

@@ -40,13 +40,46 @@ N이 6인 경우의 예를 들면 다음과 같다.
 
 import java.io.*;
 import java.util.*;
- 
+
+class pos {
+	int x, y;
+	public pos(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+}
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
 		StringTokenizer st;
-
+		int N = Integer.parseInt(br.readLine());
+		int W = Integer.parseInt(br.readLine());
+		int sum = 0;
+		ArrayList<Integer> order = new ArrayList<>();
+		
+		ArrayList<pos> pList = new ArrayList<>();
+		for(int i = 0; i < W; i++) {
+			st = new StringTokenizer(br.readLine());
+			pList.add(new pos(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+		}
+		pos p1 = new pos(1, 1), p2 = new pos(N, N);
+		for(pos p : pList) {
+			int d1 = Math.abs(p1.x - p.x) + Math.abs(p1.y - p.y);
+			int d2 = Math.abs(p2.x - p.x) + Math.abs(p2.y - p.y);
+			if (d1 < d2) {
+				sum += d1;
+				order.add(1);
+				p1 = new pos(p.x, p.y);
+			} else {
+				sum += d2;
+				order.add(2);
+				p2 = new pos(p.x, p.y);
+			}
+		}
+		sb.append(sum).append("\n");
+		for(int a : order) sb.append(a).append("\n");
+		System.out.print(sb);
 	}
 }
 /*
