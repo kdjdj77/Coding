@@ -24,19 +24,29 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
-		StringTokenizer st;
-
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		int L = 100001;
+		int[] A = new int[L], dp = new int[L];
+		
+		Queue<Integer> q = new LinkedList<>();
+		q.add(N); dp[N] = 0;
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			if (cur == K) break;
+			for(int a : new int[] {cur+1, cur-1, cur*2}) {
+				if (a < 0 || a >= L || A[a] != 0) continue;
+				A[a] += A[cur] + 1;
+				dp[a] = cur; q.add(a);
+			}
+		}
+		sb.append(A[K]).append("\n");
+		
+		Stack<Integer> s = new Stack<>();
+		s.add(K);
+		while(K != N) s.add(K = dp[K]);
+		while(!s.isEmpty()) sb.append(s.pop()).append(" ");
+		System.out.print(sb);
 	}
 }
-/*
-예제 입력 1 
-5 17
-예제 출력 1 
-4
-5 10 9 18 17
-예제 입력 2 
-5 17
-예제 출력 2 
-4
-5 4 8 16 17
-*/

@@ -39,23 +39,48 @@ A에서 B로 변환하기 위해 필요한 최소한의 명령어 나열을 출�
 
 import java.io.*;
 import java.util.*;
- 
+
+class CMD {
+	int n;
+	char c;
+	public CMD(int n, char c) {
+		this.n = n;
+		this.c = c;
+	}
+}
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
 		StringTokenizer st;
-
+		int N = Integer.parseInt(br.readLine());
+		while(N-- > 0) {
+			st = new StringTokenizer(br.readLine());
+			int A = Integer.parseInt(st.nextToken());
+			int B = Integer.parseInt(st.nextToken());
+			CMD[] dp = new CMD[10000];
+			
+			Queue<Integer> q = new LinkedList<>();
+			q.add(A);
+			while(!q.isEmpty()) {
+				int cur = q.poll();
+				if (cur == B) break;
+				for(CMD cmd : new CMD[] {D(cur), S(cur), L(cur), R(cur)}) {
+					if (dp[cmd.n] != null) continue;
+					dp[cmd.n] = new CMD(cur, cmd.c);
+					q.add(cmd.n);
+				}
+			}
+			Stack<Character> s = new Stack<>();
+			s.add(dp[B].c);
+			while(dp[B] != null) { s.add(dp[B].c); B = dp[B].n; }
+			while(!s.isEmpty()) sb.append(s.pop());
+			sb.append("\n");
+			System.out.print(sb);
+		}
 	}
+	public static CMD D(int n) { return new CMD((2*n)%10000, 'D'); }
+	public static CMD S(int n) { return new CMD(n == 0 ? 9999 : n - 1, 'S'); }
+	public static CMD L(int n) { return new CMD((n*10)%1000 + n/1000, 'L'); }
+	public static CMD R(int n) { return new CMD(n/10 + (n%10)*1000, 'R'); }
 }
-/*
-예제 입력 1 
-3
-1234 3412
-1000 1
-1 16
-예제 출력 1 
-LL
-L
-DDDD
-*/
