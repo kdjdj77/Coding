@@ -26,29 +26,69 @@ n(1≤n≤1,000)개의 도시가 있다. 그리고 한 도시에서 출발하여
 import java.io.*;
 import java.util.*;
  
-public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
-		StringTokenizer st;
-
-	}
+class Bus implements Comparable<Bus> {
+    int next, w;
+    Bus(int next, int w) {
+        this.next = next;
+        this.w = w;
+    }
+    @Override
+    public int compareTo(Bus n) {
+        return w - n.w;
+    }
 }
-/*
-예제 입력 1 
-5
-8
-1 2 2
-1 3 3
-1 4 1
-1 5 10
-2 4 2
-3 4 1
-3 5 1
-4 5 3
-1 5
-예제 출력 1 
-4
-3
-1 3 5
-*/
+public class Main {
+    static int N, E;
+    static int[] dp, path;
+    static final int INF = 200000000;
+    static ArrayList<ArrayList<Bus>> A;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st;
+        N = Integer.parseInt(br.readLine());
+        E = Integer.parseInt(br.readLine());
+ 
+        A = new ArrayList<>();
+        dp = path = new int[N+1];
+
+        for (int i = 0; i <= N; i++)  A.add(new ArrayList<>());
+        for (int i = 0; i < E; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            A.get(x).add(new Bus(y, w));
+        }
+        st = new StringTokenizer(br.readLine());
+        int s = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
+
+        dijkstra(s);
+        sb.append(dp[e]);
+        
+        System.out.print(sb);
+    }
+    public static void dijkstra(int x) {
+        PriorityQueue<Bus> q = new PriorityQueue<>();
+        boolean[] check = new boolean[N+1];
+        Arrays.fill(dp, INF);
+        q.add(new Bus(x, 0));
+        dp[x] = 0;
+ 
+        while (!q.isEmpty()) {
+            Bus node = q.poll();
+            int cur = node.next;
+            
+            if (check[cur]) continue;
+            check[cur] = true;
+            for (Bus n : A.get(cur)) {
+                if (!check[n.next] && dp[n.next] > dp[cur] + n.w) {
+                	dp[n.next] = dp[cur] + n.w;
+                    q.add(new Bus(n.next, dp[n.next]));
+                }
+            }
+        }
+    }
+}

@@ -21,10 +21,10 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		int cnt = Integer.parseInt(s.nextLine());
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		for(int i = 0; i < cnt; i++) list.add(s.nextLine());
 		
-		list = new ArrayList<String>(new HashSet<String>(list));
+		list = new ArrayList<>(new HashSet<>(list));
 		Collections.sort(list, Comparator.comparing(String::length));
 		
 		for(int i = 1; i <= 50; i++) {

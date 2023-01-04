@@ -40,14 +40,6 @@ A에서 B로 변환하기 위해 필요한 최소한의 명령어 나열을 출�
 import java.io.*;
 import java.util.*;
 
-class CMD {
-	int n;
-	char c;
-	public CMD(int n, char c) {
-		this.n = n;
-		this.c = c;
-	}
-}
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -58,29 +50,27 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
-			CMD[] dp = new CMD[10000];
+			String[] dp = new String[10000];
 			
 			Queue<Integer> q = new LinkedList<>();
 			q.add(A);
+			dp[A] = "";
 			while(!q.isEmpty()) {
-				int cur = q.poll();
+				int cur = q.poll(), next;
+				String s = dp[cur];
 				if (cur == B) break;
-				for(CMD cmd : new CMD[] {D(cur), S(cur), L(cur), R(cur)}) {
-					if (dp[cmd.n] != null) continue;
-					dp[cmd.n] = new CMD(cur, cmd.c);
-					q.add(cmd.n);
-				}
+
+				if (dp[next=D(cur)] == null) { dp[next] = s+"D"; q.add(next); }
+				if (dp[next=S(cur)] == null) { dp[next] = s+"S"; q.add(next); }
+				if (dp[next=L(cur)] == null) { dp[next] = s+"L"; q.add(next); }
+				if (dp[next=R(cur)] == null) { dp[next] = s+"R"; q.add(next); }
 			}
-			Stack<Character> s = new Stack<>();
-			s.add(dp[B].c);
-			while(dp[B] != null) { s.add(dp[B].c); B = dp[B].n; }
-			while(!s.isEmpty()) sb.append(s.pop());
-			sb.append("\n");
-			System.out.print(sb);
+			sb.append(dp[B]).append("\n");
 		}
+		System.out.print(sb);
 	}
-	public static CMD D(int n) { return new CMD((2*n)%10000, 'D'); }
-	public static CMD S(int n) { return new CMD(n == 0 ? 9999 : n - 1, 'S'); }
-	public static CMD L(int n) { return new CMD((n*10)%1000 + n/1000, 'L'); }
-	public static CMD R(int n) { return new CMD(n/10 + (n%10)*1000, 'R'); }
+	public static int D(int n) { return (2*n)%10000; }
+	public static int S(int n) { return n==0?9999:n-1; }
+	public static int L(int n) { return (n*10)%10000+n/1000; }
+	public static int R(int n) { return n/10+(n%10)*1000; }
 }
