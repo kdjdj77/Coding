@@ -26,32 +26,34 @@ n(1≤n≤1,000)개의 도시가 있다. 그리고 한 도시에서 출발하여
 import java.io.*;
 import java.util.*;
  
-class Bus implements Comparable<Bus> {
+class Node implements Comparable<Node> {
     int next, w;
-    Bus(int next, int w) {
+    Node(int next, int w) {
         this.next = next;
         this.w = w;
     }
     @Override
-    public int compareTo(Bus n) {
+    public int compareTo(Node n) {
         return w - n.w;
     }
 }
 public class Main {
     static int N, E;
+    static ArrayList<ArrayList<Node>> A;
     static int[] dp, path;
     static final int INF = 200000000;
-    static ArrayList<ArrayList<Bus>> A;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
+        
         N = Integer.parseInt(br.readLine());
         E = Integer.parseInt(br.readLine());
  
         A = new ArrayList<>();
-        dp = path = new int[N+1];
+        dp = new int[N+1];
+        path = new int[N+1];
 
         for (int i = 0; i <= N; i++)  A.add(new ArrayList<>());
         for (int i = 0; i < E; i++) {
@@ -59,36 +61,45 @@ public class Main {
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
             int w = Integer.parseInt(st.nextToken());
-            A.get(x).add(new Bus(y, w));
+            A.get(x).add(new Node(y, w));
         }
         st = new StringTokenizer(br.readLine());
         int s = Integer.parseInt(st.nextToken());
         int e = Integer.parseInt(st.nextToken());
-
-        dijkstra(s);
-        sb.append(dp[e]);
         
+        sb.append(dijkstra(s, e)).append("\n");
+        
+        int cnt = 1;
+        Stack<Integer> S = new Stack<>();
+        S.add(e);
+        while(path[e] != 0) {
+        	S.add(e = path[e]);
+        	cnt++;
+        }
+        sb.append(cnt).append("\n");
+        while(!S.isEmpty()) sb.append(S.pop()).append(" ");
         System.out.print(sb);
     }
-    public static void dijkstra(int x) {
-        PriorityQueue<Bus> q = new PriorityQueue<>();
+    public static int dijkstra(int x, int y) {
+        PriorityQueue<Node> q = new PriorityQueue<>();
         boolean[] check = new boolean[N+1];
         Arrays.fill(dp, INF);
-        q.add(new Bus(x, 0));
+        q.add(new Node(x, 0));
         dp[x] = 0;
  
         while (!q.isEmpty()) {
-            Bus node = q.poll();
-            int cur = node.next;
+            int cur = q.poll().next;
+            if (cur == y) break;
             
             if (check[cur]) continue;
             check[cur] = true;
-            for (Bus n : A.get(cur)) {
+            for (Node n : A.get(cur)) {
                 if (!check[n.next] && dp[n.next] > dp[cur] + n.w) {
-                	dp[n.next] = dp[cur] + n.w;
-                    q.add(new Bus(n.next, dp[n.next]));
+                    q.add(new Node(n.next, dp[n.next] = dp[cur] + n.w));
+                    path[n.next] = cur;
                 }
             }
         }
+        return dp[y];
     }
 }
