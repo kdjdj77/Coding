@@ -60,6 +60,7 @@ public class Main {
 				sb.append(dp[i][j] == INF ? 0 : dp[i][j]).append(" ");
 			sb.append("\n");
 		}
+		
 		System.out.print(sb);
 	}
 }
