@@ -34,7 +34,6 @@ public class Main {
 		for(int i = 0; i < N; i++) POST[i] = Integer.parseInt(st.nextToken());
 		
 		setPre(0, N-1, 0, N-1);
-		
 		for(int i = 0; i < N; i++) sb.append(PRE[i]).append(" ");
 		
 		System.out.print(sb);
