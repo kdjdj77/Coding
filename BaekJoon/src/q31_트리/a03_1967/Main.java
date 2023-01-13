@@ -39,7 +39,6 @@ public class Main {
 	static int max, edge;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
 		StringTokenizer st;
 		int N = Integer.parseInt(br.readLine());
 		

@@ -16,38 +16,35 @@ import java.io.*;
 import java.util.*;
  
 public class Main {
-	static int[] IN, POST, PRE;
-	static int idx;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
-		StringTokenizer st;
-		int N = Integer.parseInt(br.readLine());
-		IN = new int[N];
-		POST = new int[N];
-		PRE = new int[N];
-		
-		st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < N; i++) IN[i] = Integer.parseInt(st.nextToken());
-		st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < N; i++) POST[i] = Integer.parseInt(st.nextToken());
-		
-		setPre(0, N-1, 0, N-1);
-		for(int i = 0; i < N; i++) sb.append(PRE[i]).append(" ");
-		
-		System.out.print(sb);
-	}
-	public static void setPre(int in1, int in2, int post1, int post2) {
-		if (in1 <= in2 && post1 <= post2) {
-			PRE[idx++] = POST[post2];
+	static StringBuilder sb = new StringBuilder();
+    static int[] IN, POST, IDX;
 
-			int rootIdx = in1;
-			for (int i = in1; i <= in2; i++) {
-				if (IN[i] == POST[post2]) { rootIdx = i; break; }
-			}
-			setPre(in1, rootIdx - 1, post1, post1 + rootIdx - in1 - 1);
-			setPre(rootIdx + 1, in2, post1 + rootIdx - in1, post2 - 1);
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        
+        int N = Integer.parseInt(br.readLine());
+        IN = new int[N+1];
+        POST = new int[N+1];
+        IDX = new int[N+1];
+
+        st = new StringTokenizer(br.readLine());
+        for(int i = 1; i <= N; i++) IDX[IN[i] = Integer.parseInt(st.nextToken())] = i;
+        st = new StringTokenizer(br.readLine());
+        for(int i = 1; i <= N; i++) POST[i] = Integer.parseInt(st.nextToken());
+
+        setPre(1, N, 1, N);
+        System.out.println(sb);
+    }
+
+    private static void setPre(int in1, int in2, int post1, int post2) {
+        if(in1 > in2 || post1 > post2) return;
+        
+        int res = POST[post2], root = IDX[res];
+        sb.append(res).append(" ");
+        
+        if (post1 == post2) return;
+        setPre(in1, root-1, post1, post1+root-in1-1);
+        setPre(root+1, in2, post1+root-in1, post2-1);
+    }
 }
