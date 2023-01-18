@@ -18,19 +18,19 @@ import java.io.IOException;
 import java.util.StringTokenizer;
  
 public class Main {
-	static int[][] bin;
+	static int[][] dp;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 		if (K > N / 2) K = N - K;
-		bin = new int[N + 1][K + 1];
+		dp = new int[N + 1][K + 1];
 		System.out.println(calc(N, K));
 	}
 	static int calc(int N, int K) {
-		if (bin[N][K] > 0) return bin[N][K];
-		if (K == 0 || N == K) return bin[N][K] = 1;
-		return bin[N][K] = (calc(N - 1, K - 1) + calc(N - 1, K)) % 10007;
+		if (dp[N][K] > 0) return dp[N][K];
+		if (K == 0 || N == K) return dp[N][K] = 1;
+		return dp[N][K] = (calc(N - 1, K - 1) + calc(N - 1, K)) % 10007;
 	}
 }

@@ -21,48 +21,40 @@ import java.io.*;
 import java.util.*;
  
 public class Main {
-	static int[] parent = new int[1000001];
+	static int[] A;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuffer sb = new StringBuffer();
 		
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
+		A = new int[N+1];
+		for(int i = 0; i <= N; i++) A[i] = i;
+		
 		while(M-- > 0) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
-			if (a == 0) {
-				
-			} else {
-				boolean res = false;
-
-
-				sb.append(res?"YES":"NO").append("\n");
-			}
+			
+			if (a == 0) union(x, y);
+			else sb.append(isSameRoot(x, y) ? "YES" : "NO").append("\n");
 		}
 		System.out.print(sb);
 	}
-	
-	public static int find(int x) {
-        if(x == parent[x])
-            return x;
-        else 
-            return parent[x] = find(parent[x]);
+	public static int root(int x) {
+        if(x == A[x]) return x;
+        return A[x] = root(A[x]);
 	}
-	
     public static void union(int x, int y) {
-        x = find(x); y = find(y);
-        if(x != y) {
-            if(x < y) parent[y] = x;
-            else parent[x] = y;
-        }
+        x = root(x); y = root(y);
+        if (x == y) return;
+        if (x < y) A[y] = x;
+        else A[x] = y;
     }
-    public static boolean isSameParent(int x, int y) {
-        if(find(x) == find(y)) return true;
-        else return false;
+    public static boolean isSameRoot(int x, int y) {
+        return root(x) == root(y);
     }
 }
