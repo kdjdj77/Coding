@@ -25,7 +25,7 @@ public class Main {
 		A = new int[V+1];
 		for(int i = 1; i <= V; i++) A[i] = i;
 		
-		ArrayList<Node> path = new ArrayList<>();
+		PriorityQueue<Node> path = new PriorityQueue<>();
 		for(int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
@@ -33,10 +33,15 @@ public class Main {
 			int c = Integer.parseInt(st.nextToken());
 			path.add(new Node(a, b, c));
 		}
-		Collections.sort(path);
 		
 		int res = 0;
-		for(Node n : path) if (!isSameRoot(n.l, n.r)) { union(n.l, n.r); res += n.w; }
+		while(!path.isEmpty()) {
+			Node n = path.poll();
+			if (!isSameRoot(n.l, n.r)) {
+				union(n.l, n.r);
+				res += n.w;
+			}
+		}
 		
 		System.out.print(res);
 	}
