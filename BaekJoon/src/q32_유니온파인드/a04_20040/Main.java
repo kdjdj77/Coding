@@ -32,36 +32,38 @@ import java.io.*;
 import java.util.*;
  
 public class Main {
-	static int[][] A;
+	static int[] A;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuffer sb = new StringBuffer();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		A = new int[2][N];
+		A = new int[N];
+		
+		for(int i = 1; i < N; i++) A[i] = i;
+		int res = 0;
 		
 		for(int n = 1; n <= M; n++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
-			int user = n % 2;
-			
-			
+			if (isSameRoot(x, y)) { res = n; break; }
+			union(x, y);
 		}
+		System.out.print(res);
 	}
-	public static int root(int u, int x) {
-        if(x == A[u][x]) return x;
-        return A[u][x] = root(u, A[u][x]);
+	public static int root(int x) {
+        if(x == A[x]) return x;
+        return A[x] = root(A[x]);
 	}
-    public static void union(int u, int x, int y) {
-        x = root(u, x); y = root(u, y);
+    public static void union(int x, int y) {
+        x = root(x); y = root(y);
         if (x == y) return;
-        if (x < y) A[u][y] = x;
-        else A[u][x] = y;
+        if (x < y) A[y] = x;
+        else A[x] = y;
     }
-    public static boolean isSameRoot(int u, int x, int y) {
-        return root(u, x) == root(u, y);
+    public static boolean isSameRoot(int x, int y) {
+        return root(x) == root(y);
     }
 }
