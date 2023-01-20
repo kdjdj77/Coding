@@ -32,8 +32,8 @@ class God {
 }
 class Node implements Comparable<Node> {
 	int l, r;
-	Double w;
-	public Node(int l, int r, Double w) {
+	double w;
+	public Node(int l, int r, double w) {
 		this.l = l;
 		this.r = r;
 		this.w = w;
@@ -75,12 +75,11 @@ public class Main {
 			for(int j = i+1; j <= N; j++) {
 				int dx = gods[i].x - gods[j].x;
 				int dy = gods[i].y - gods[j].y;
-				Double dist = Math.sqrt(dx*dx + dy*dy);
-				path.add(new Node(i, j, dist));
+				path.add(new Node(i, j, Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))));
 			}
 		}
 		
-		float res = 0f;
+		double res = 0d;
 		while(!path.isEmpty()) {
 			Node n = path.poll();
 			if (!isSameRoot(n.l, n.r)) {
