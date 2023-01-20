@@ -10,8 +10,8 @@ class God {
 }
 class Node implements Comparable<Node> {
 	int l, r;
-	Double w;
-	public Node(int l, int r, Double w) {
+	double w;
+	public Node(int l, int r, double w) {
 		this.l = l;
 		this.r = r;
 		this.w = w;
@@ -51,13 +51,13 @@ public class Main {
 		PriorityQueue<Node> path = new PriorityQueue<>();
 		for(int i = 1; i < N; i++) {
 			for(int j = i+1; j <= N; j++) {
-				long dx = gods[i].x - gods[j].x;
-				long dy = gods[i].y - gods[j].y;
-				path.add(new Node(i, j, Math.sqrt(dx*dx + dy*dy)));
+				int dx = gods[i].x - gods[j].x;
+				int dy = gods[i].y - gods[j].y;
+				path.add(new Node(i, j, Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))));
 			}
 		}
 		
-		Double res = 0d;
+		double res = 0d;
 		while(!path.isEmpty()) {
 			Node n = path.poll();
 			if (!isSameRoot(n.l, n.r)) {
@@ -73,7 +73,6 @@ public class Main {
 	}
     public static void union(int x, int y) {
         x = root(x); y = root(y);
-        if (x == y) return;
         if (x < y) A[y] = x;
         else A[x] = y;
     }
