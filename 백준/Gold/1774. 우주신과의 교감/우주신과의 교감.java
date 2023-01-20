@@ -53,8 +53,7 @@ public class Main {
 			for(int j = i+1; j <= N; j++) {
 				long dx = gods[i].x - gods[j].x;
 				long dy = gods[i].y - gods[j].y;
-				Double dist = Math.sqrt(dx*dx + dy*dy);
-				if (!isSameRoot(i, j)) path.add(new Node(i, j, dist));
+				path.add(new Node(i, j, Math.sqrt(dx*dx + dy*dy)));
 			}
 		}
 		
