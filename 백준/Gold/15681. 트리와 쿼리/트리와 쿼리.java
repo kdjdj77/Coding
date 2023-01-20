@@ -29,10 +29,7 @@ public class Main {
 	}
 	public static int setCount(int root, int cur) {
 		int res = 1;
-		for(int a : A.get(cur)) {
-			if (a == root) continue;
-			res += setCount(cur, a);
-		}
+		for(int a : A.get(cur)) if (a != root) res += setCount(cur, a);
 		return dp[cur] = res;
 	}
 }
