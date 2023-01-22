@@ -16,7 +16,7 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	static int[] w;
+	static int[] w, dp[];
 	static boolean[] select;
 	static ArrayList<ArrayList<Integer>> tree = new ArrayList<>();
 
@@ -26,6 +26,7 @@ public class Main {
 		int N = Integer.parseInt(br.readLine());
 
 		w = new int[N+1];
+		dp = new int[N+1][2];
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= N; i++) w[i] = Integer.parseInt(st.nextToken());
 
@@ -40,29 +41,30 @@ public class Main {
 		tree.get(0).add(1);
 
 		select = new boolean[N+1];
-		sb.append(dp(0, 0, false)).append("\n");
+		sb.append(setDP(0, 0, false)).append("\n");
 		
+		trace(0, 1, select[1]);
 		for(int i = 1; i <= N; i++) if (select[i]) sb.append(i).append(" ");
 		System.out.print(sb);
 	}
-
-	static int dp(int root, int cur, boolean isOn) {
-		int weight = 0;
-		if (isOn) {
-			for (int next : tree.get(cur))
-				if (root != next)
-					weight += dp(cur, next, false);
-			return weight + w[cur];
-		}
+	static int setDP(int root, int cur, boolean isOn) {
+		int res = isOn ? w[cur] : 0;
 		for (int next : tree.get(cur)) {
-			if(root != next) {
-				int on = dp(cur, next, true);
-				int off = dp(cur, next, false);
-	
+			if(root == next) continue;
+			
+			int off = dp[next][0] = setDP(cur, next, false);
+			if (!isOn) {
+				int on = dp[next][1] = setDP(cur, next, true);
 				select[next] = on > off;
-				weight += Math.max(on, off);
-			}
+				res += Math.max(on, off);
+			} else res += off;
 		}
-		return weight;
+		return res;
+	}
+	static void trace(int root, int cur, boolean b) {
+		select[cur] = b;
+		for(int next : tree.get(cur))
+			if (root != next)
+				trace(cur, next, b ? false : dp[next][1] > dp[next][0]);
 	}
 }
