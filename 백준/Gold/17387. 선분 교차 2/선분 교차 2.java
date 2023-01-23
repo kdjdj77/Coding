@@ -2,13 +2,13 @@ import java.io.*;
 import java.util.*;
 
 class Dot {
-	int x, y;
+	long x, y;
 	public Dot(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	public long dist() {
-		return (long)(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+		return this.x*this.x + this.y*this.y;
 	}
 }
 public class Main {
@@ -41,8 +41,8 @@ public class Main {
 	}
 	public static int ccw(Dot a, Dot b, Dot c) {
 		long res = 0;
-		res += (long)a.x*b.y + (long)b.x*c.y + (long)c.x*a.y;
-		res -= (long)a.y*b.x + (long)b.y*c.x + (long)c.y*a.x;
+		res += a.x*b.y + b.x*c.y + c.x*a.y;
+		res -= a.y*b.x + b.y*c.x + c.y*a.x;
 		if (res != 0) return res > 0 ? 1 : -1;
 		return 0;
 	}
