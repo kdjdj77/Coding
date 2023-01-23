@@ -37,10 +37,10 @@ public class Main {
 		boolean check2 = ccw(b,a[0],a[1]) * ccw(b,a[2],a[3]) < 0;
 		System.out.print(check1 && check2 ? 1 : 0);
 	}
-	public static int ccw(int[] a, int x, int y) {
+	public static int ccw(int[] a, long x, long y) {
 		long res = 0;
-		res += a[0]*a[3] + a[2]*y + x*a[1];
-		res -= a[1]*a[2] - a[3]*x - y*a[0];
+		res += (long)a[0]*a[3] + a[2]*y + x*a[1];
+		res -= (long)a[1]*a[2] + a[3]*x + y*a[0];
 		return res > 0 ? 1 : -1;
 	}
 }
