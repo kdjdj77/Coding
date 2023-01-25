@@ -43,23 +43,7 @@ return할 정수 배열의 i번째 원소는 과녁의 10 - i 점을 맞힌 화�
 
 class Solution {
 	static int p, res[];
-	public static void main(String args[]) {
-		int n; int[] info;
-		n = 5; info = new int[] {2,1,1,1,0,0,0,0,0,0,0};
-		print(solution(n, info));
-		n = 1; info = new int[] {1,0,0,0,0,0,0,0,0,0,0};
-		print(solution(n, info));
-		n = 9; info = new int[] {0,0,1,2,0,1,1,1,1,1,1};
-		print(solution(n, info));
-		n = 10; info = new int[] {0,0,0,0,0,0,0,0,3,4,3};
-		print(solution(n, info));
-	}
-	public static void print(int[] a) {
-    	System.out.print("[" + a[0]);
-    	for(int i = 1; i < a.length; i++) System.out.print(", " + a[i]);
-    	System.out.println("]");
-    }
-    public static int[] solution(int n, int[] info) {
+    public int[] solution(int n, int[] info) {
     	int[] dp = new int[11];
     	res = new int[11];
     	p = 0;
@@ -67,7 +51,7 @@ class Solution {
     	f(info, dp, n, 0);
     	return isNull() ? new int[] {-1} : res;
     }
-    public static void f(int[] info, int[] dp, int n, int depth) {
+    void f(int[] info, int[] dp, int n, int depth) {
     	if (depth == 10) {
     		dp[depth] += n;
     		int point = isWin(info, dp);
@@ -84,7 +68,7 @@ class Solution {
     		dp[depth] -= i;
     	}
     }
-    public static int isWin(int[] apeach, int[] lion) {
+    int isWin(int[] apeach, int[] lion) {
     	int A = 0, L = 0;
     	for(int i = 0; i < 11; i++) {
     		if (apeach[i] == 0 && lion[i] == 0) continue;
@@ -93,7 +77,7 @@ class Solution {
     	}
     	return L > A ? L : -1;
     }
-    public static boolean isNull() {
+    boolean isNull() {
     	int cnt = 0;
     	for(int i = 0; i < 11; i++) cnt += res[i];
     	return cnt == 0;

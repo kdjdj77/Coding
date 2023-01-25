@@ -45,7 +45,7 @@ public class Main {
 		setRes(1, new int[] {stats[0],0,0,0,0,0,0,0});
 		System.out.print(res*8);
 	}
-	public static boolean ccw (int a1, int a2, int a3) {
+	public static boolean ccw(int a1, int a2, int a3) {
 		double d = (r2*a1*a3) / (a3 + a1);
 		return a2 > d;
 	}
