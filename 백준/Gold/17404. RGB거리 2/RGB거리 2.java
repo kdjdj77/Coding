@@ -27,11 +27,11 @@ public class Main {
     	dp[0][s] = house[0][s];
     	
         for(int i = 1; i < N; i++) {
-            dp[i][0] = Math.min(dp[i-1][1], dp[i-1][2]) + house[i][0];
-            dp[i][1] = Math.min(dp[i-1][0], dp[i-1][2]) + house[i][1];
-            dp[i][2] = Math.min(dp[i-1][0], dp[i-1][1]) + house[i][2];
-        }
-        for(int i = 0; i < 3; i++) if(i != s) res = Math.min(res, dp[N-1][i]);
+        	for(int j = 0; j < 3; j++) {
+        		dp[i][j] = Math.min(dp[i-1][(j+1)%3], dp[i-1][(j+2)%3]) + house[i][j];
+        		if (i == N-1) if(s != j) res = Math.min(res, dp[N-1][j]);
+        	}
+    	}
         return res;
     }
 }
