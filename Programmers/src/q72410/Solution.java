@@ -18,11 +18,12 @@ class Solution {
     	return s.toLowerCase();
     }
 	String lv2(String s) {
-		char[] arr = s.toCharArray();
         StringBuilder sb = new StringBuilder();
-        for (char c : arr)
+        for (int i = 0; i < s.length(); i++) {
+        	char c = s.charAt(i);
             if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.')
                 sb.append(c);
+        }
         return sb.toString();
 	}
 	String lv3(String s) {
