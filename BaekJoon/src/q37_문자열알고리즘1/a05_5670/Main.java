@@ -11,6 +11,10 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuffer sb = new StringBuffer();
 		StringTokenizer st;
-
+		
+		int N = Integer.parseInt(br.readLine());
+		for(int i = 0; i < N; i++) {
+			String s = br.readLine();
+		}
 	}
 }

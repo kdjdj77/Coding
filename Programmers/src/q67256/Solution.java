@@ -24,9 +24,54 @@ hand는 "left" 또는 "right" 입니다.
 왼손 엄지손가락을 사용한 경우는 L, 오른손 엄지손가락을 사용한 경우는 R을 순서대로 이어붙여 문자열 형태로 return 해주세요.
 */
 
+class Pos {
+	int x, y;
+	public Pos(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	public int dist(Pos p) {
+		int dx = Math.abs(this.x - p.x);
+		int dy = Math.abs(this.y - p.y);
+		return dx + dy;
+	}
+}
 class Solution {
     public String solution(int[] numbers, String hand) {
-        String answer = "";
-        return answer;
+    	StringBuilder sb = new StringBuilder();
+    	
+    	boolean isRH = hand.equals("right");
+    	Pos[] pos = new Pos[12];    	
+    	
+		pos[0] = new Pos(3, 1);
+		for(int i = 1; i < 10; i++) pos[i] = new Pos((i-1)/3, (i-1)%3);
+		
+    	int curL = 10; pos[10] = new Pos(3, 0);
+    	int curR = 11; pos[11] = new Pos(3, 2);
+    	
+        for(int n : numbers) {
+        	switch(n) {
+	        	case 1: case 4: case 7:
+	        		sb.append("L");
+	        		curL = n;
+	        		break;
+	        	case 3: case 6: case 9:
+	        		sb.append("R");
+	        		curR = n;
+	        		break;
+	        	case 2: case 5: case 8: case 0:
+	        		int dl = pos[n].dist(pos[curL]);
+	        		int dr = pos[n].dist(pos[curR]);
+	        		if ((dl == dr && isRH) || dr < dl) {
+	        			sb.append("R");
+	        			curR = n;
+	        		} else {
+	        			sb.append("L");
+	        			curL = n;
+	        		}
+	        		break;
+        	}
+        }
+        return sb.toString();
     }
 }

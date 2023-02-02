@@ -36,9 +36,22 @@ win_nums에는 같은 숫자가 2개 이상 담겨있지 않습니다.
 win_nums의 원소들은 정렬되어 있지 않을 수도 있습니다.
 */
 
+import java.util.*;
+
 class Solution {
     public int[] solution(int[] lottos, int[] win_nums) {
-        int[] answer = {};
-        return answer;
+    	int cnt = 0, zeroCnt = 0;
+
+    	int[] rank = new int[] {6, 6, 5, 4, 3, 2, 1};
+
+    	Set<Integer> winSet = new HashSet<>();
+    	for(int i : win_nums) winSet.add(i);
+
+    	for(int i = 0; i < lottos.length; i++) {
+    		if (winSet.contains(lottos[i])) cnt++;
+    		else if (lottos[i] == 0) zeroCnt++;
+    	}
+
+    	return new int[] {rank[cnt + zeroCnt], rank[cnt]};
     }
 }
