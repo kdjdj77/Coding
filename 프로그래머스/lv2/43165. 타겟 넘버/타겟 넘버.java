@@ -1,18 +1,13 @@
+
 class Solution {
-	static int res, t, nums[];
     public int solution(int[] numbers, int target) {
-    	res = 0;
-    	t = target;
-    	nums = numbers;        
-        dfs(0, 0);
-        return res;
+        return dfs(0, numbers, 0, target);
     }
-    private void dfs(int num, int depth) {
-    	if (depth == nums.length) {
-    		if (num == t) res++;
-    		return;
-    	}
-    	dfs(num + nums[depth], depth + 1);
-    	dfs(num - nums[depth], depth + 1);
+    private int dfs(int num, int[] nums, int depth, int t) {
+    	if (depth == nums.length) return num == t ? 1 : 0;
+    	int res = 0;
+    	res += dfs(num + nums[depth], nums, depth + 1, t);
+    	res += dfs(num - nums[depth], nums, depth + 1, t);
+    	return res;
     }
 }
