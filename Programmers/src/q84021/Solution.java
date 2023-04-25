@@ -22,11 +22,20 @@ class Solution {
     	Map<Integer, ArrayList<boolean[][]>> mapA = split(table);
     	Map<Integer, ArrayList<boolean[][]>> mapB = split(game_board);
     	
+    	for(int i = 0; i < 7; i++) print(mapA.get(i));
+    	
     	for(int i = 1; i < 7; i++) {
     		res += count(i, mapA.get(i), mapB.get(i));
     	}
 
         return res;
+    }
+    private void print(boolean[][] a) {
+    	for(int i = 0; i < a.length; i++) {
+    		for(int j = 0; j < a[0].length; i++) {
+    			System.out.print();
+    		}
+    	}
     }
     private Map<Integer, ArrayList<boolean[][]>> split(int[][] table) {
     	Map<Integer, ArrayList<boolean[][]>> map = new HashMap<>();
