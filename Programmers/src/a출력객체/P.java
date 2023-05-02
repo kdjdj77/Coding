@@ -5,6 +5,7 @@ public class P {
 		System.out.println("test");
 	    if (o instanceof Integer) System.out.println(o);
 	    else if (o instanceof String) System.out.println(o);
+	    else if (o instanceof Character) System.out.println(o);
 	    else if (o instanceof int[]) {
 	    	for (int i : (int[]) o) System.out.print(i+" ");
 	    	System.out.println();
@@ -14,7 +15,7 @@ public class P {
 	            for (int i : arr) System.out.print(i+" ");
 	            System.out.println();
 	        }
-	    } 
+	    }
 	    else if (o instanceof String[]) {
 	    	for (String s : (String[]) o) System.out.print(s+" ");
 	    	System.out.println();
@@ -22,6 +23,16 @@ public class P {
 	    else if (o instanceof String[][]) {
 	        for (String[] arr : (String[][]) o) {
 	            for (String s : arr) System.out.print(s+" ");
+	            System.out.println();
+	        }
+	    }
+	    else if (o instanceof char[]) {
+	    	for (char i : (char[]) o) System.out.print(i+" ");
+	    	System.out.println();
+	    }
+	    else if (o instanceof char[][]) {
+	        for (char[] arr : (char[][]) o) {
+	            for (char i : arr) System.out.print(i+" ");
 	            System.out.println();
 	        }
 	    }
