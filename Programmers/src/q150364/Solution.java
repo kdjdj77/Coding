@@ -24,9 +24,20 @@ class Solution {
     	for(int i = 0; i <= N; i++) map.put(i+1, new ArrayList<>());
     	for(int i = 0; i < N; i++) map.get(edges[i][0]).add(i);
     	
-    	calc()
+    	int[] tmp = new int[N+1];
+    	calc(tmp);
     	
         return new int[] {};
+    }
+    private void calc(int[] tmp) {
+    	while(true) {
+    		
+    	}
+    }
+    private int[] move(int num, int[] tmp) {
+    	while(true) {
+    		
+    	}
     }
     // -1:불가, 0:일치, 1:가능
     private int isOk(int[] tmp) {
