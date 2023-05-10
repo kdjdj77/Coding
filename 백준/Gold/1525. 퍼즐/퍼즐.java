@@ -2,66 +2,62 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static final int fin = 123456780;
-	private static Map<Integer, Integer> dp;
+    private static class Board{
+        int num, idx0, cnt;
+        public Board(int n, int idx0, int cnt) {
+            this.num = n;
+            this.idx0 = idx0;
+            this.cnt = cnt;
+        }
+    }
+    private static final int[] p10 = {1,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000};
     public static void main(String[] args) throws IOException {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		int[][] pan = new int[3][3];
-		for(int i = 0; i < 3; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < 3; j++) pan[i][j] = Integer.parseInt(st.nextToken());
-		}
-		bfs(pan);
-		System.out.print(dp.containsKey(fin) ? dp.get(fin) : -1);
-    }
-    private static void bfs(int[][] pan) {
-    	dp = new HashMap<>();
-		dp.put(arr2int(pan), 0);
-    	Queue<int[][]> q = new LinkedList<>();
-    	q.add(pan);
-    	while(!q.isEmpty()) {
-    		if (dp.containsKey(fin)) return;
-    		
-    		int cur[][] = q.poll();
-    		int curKey = arr2int(cur);
-    		int pos0[] = pos(cur), x1 = pos0[0], y1 = pos0[1];
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
+        
+        int init = 0, pos0 = -1;
+        for (int i = 0; i < 9; i++) {
+            if (i%3 == 0) st = new StringTokenizer(br.readLine());
+            int num = Integer.parseInt(st.nextToken());
+            init += num * p10[8-i];
+            if (num == 0) pos0 = 8-i;
+        }
 
-	    	for(int[] move : new int[][] {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}) {
-	    		int x2 = x1 + move[0], y2 = y1 + move[1];
-	    		if (x2 < 0 || y2 < 0 || x2 > 2 || y2 > 2) continue;
+        Queue<Board> q = new LinkedList<>();
+        HashMap<Integer, Board> visit = new HashMap<>();
+        Board first = new Board(init, pos0,0);
+        q.add(first); visit.put(init, first);
 
-	    		int[][] next = swap(cur, x1, y1, x2, y2);
-	    		int nextKey = arr2int(next);
-	    		
-	    		if (dp.containsKey(nextKey)) continue;
-	    		dp.put(nextKey, dp.get(curKey) + 1);
-	    		q.add(next);
-	    	}
-    	}
+        ArrayList<ArrayList<Integer>> move = new ArrayList<>();
+        for(int i = 0; i < 9; i++) {
+        	ArrayList<Integer> next = new ArrayList<>();
+        	if (i/3 != 0) next.add(i-3);
+        	if (i%3 != 0) next.add(i-1);
+        	if ((i+1)%3 != 0) next.add(i+1);
+        	if (i/3 != 2) next.add(i+3);
+        	move.add(next);
+        }
+        
+        int res = -1;
+        while (!q.isEmpty()){
+            Board cur = q.poll();
+            if (cur.num == 123456780) { res = cur.cnt; break; }
+            
+            int s = cur.idx0;
+            ArrayList<Integer> arr = move.get(s);
+            for(int e : arr) {
+            	int next = swap(s, e, cur.num);
+            	Board tmp = new Board(next, e, cur.cnt+1);
+                
+                if (visit.containsKey(next)) continue;
+                visit.put(next, tmp);
+                q.add(tmp);
+            }
+        }
+        System.out.print(res);
     }
-    private static int[][] swap(int[][] arr, int x1, int y1, int x2, int y2) {
-    	int[][] res = new int[3][3];
-    	for(int i = 0; i < 9; i++) res[i/3][i%3] = arr[i/3][i%3];
-    	
-    	int tmp = res[x1][y1];
-    	res[x1][y1] = res[x2][y2];
-    	res[x2][y2] = tmp;
-    	return res;
-    }
-    private static int arr2int(int[][] arr) {
-    	int n = 100000000, res = 0;
-    	for(int i = 0; i < 9; i++) {
-    		res += arr[i/3][i%3] * n;
-    		n /= 10;
-    	}
-    	return res;
-    }
-    private static int[] pos(int[][] a) {
-    	for(int i = 0; i < 3; i++)
-    		for(int j = 0; j < 3; j++)
-    			if (a[i][j] == 0) return new int[] {i, j};
-    	return null;
+    public static int d(int num, int idx) { return num / p10[idx] % 10; }
+    private static int swap(int s, int e, int num) {
+        return num - d(num,s)*p10[s] - d(num,e)*p10[e] + d(num,s)*p10[e] + d(num,e)*p10[s];
     }
 }
