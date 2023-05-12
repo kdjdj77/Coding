@@ -10,14 +10,14 @@ public class Main {
 		int nA = Integer.parseInt(st.nextToken());
 		int nB = Integer.parseInt(st.nextToken());
 		TreeSet<Integer> A = new TreeSet<>();
-		Set<Integer> B = new HashSet<>();
 		
 		st = new StringTokenizer(br.readLine());
 		while(nA-- > 0) A.add(Integer.parseInt(st.nextToken()));
 		st = new StringTokenizer(br.readLine());
-		while(nB-- > 0) B.add(Integer.parseInt(st.nextToken()));
-		
-		A.removeAll(B);
+		while(nB-- > 0) {
+			int num = Integer.parseInt(st.nextToken());
+			if (A.contains(num)) A.remove(num);
+		}
 		sb.append(A.size()).append("\n");
 		for(int a : A) sb.append(a).append(" ");
 		System.out.print(sb);
