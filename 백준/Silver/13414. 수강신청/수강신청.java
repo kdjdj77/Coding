@@ -9,7 +9,6 @@ public class Main {
 		
 		int K = Integer.parseInt(st.nextToken());
 		int N = Integer.parseInt(st.nextToken());
-		
 		Set<String> set = new LinkedHashSet<>();
 		while(N-- > 0) {
 			String num = br.readLine();
