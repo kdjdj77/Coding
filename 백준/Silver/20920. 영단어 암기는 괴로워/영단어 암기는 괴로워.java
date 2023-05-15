@@ -9,24 +9,19 @@ public class Main {
 		
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		Map<String, Integer> map = new HashMap<>();
-		Set<String> words = new LinkedHashSet<>();
+		Map<String, Integer> map = new LinkedHashMap<>();
 		
 		while(N-- > 0) {
 			String s = br.readLine();
-			if (s.length() >= M) {
-				map.put(s, map.getOrDefault(s, 0) + 1);
-				words.add(s);
-			}
+			if (s.length() >= M) map.put(s, map.getOrDefault(s, 0) + 1);
 		}
-		words.stream().sorted(new Comparator<>() {
+		map.keySet().stream().sorted(new Comparator<>() {
 			@Override
 			public int compare(String o1, String o2) {
-				if (map.get(o1) != map.get(o2)) return map.get(o2) - map.get(o1);
-				if (o1.length() != o2.length()) return o2.length() - o1.length();
-				return o1.compareTo(o2);
+				int m1 = map.get(o1), m2 = map.get(o2), l1 = o1.length(), l2 = o2.length();
+				return m1 != m2 ? m2 - m1 : (l1 != l2 ? l2 - l1 : o1.compareTo(o2));
 			}
-		}).forEach(w -> sb.append(w).append("\n"));;
+		}).forEach(w -> sb.append(w).append("\n"));
 		System.out.print(sb);
     }
 }
