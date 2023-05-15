@@ -10,16 +10,15 @@ public class Main {
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		Map<String, Integer> map = new HashMap<>();
-		Set<String> set = new HashSet<>();
+		Set<String> words = new LinkedHashSet<>();
 		
 		while(N-- > 0) {
 			String s = br.readLine();
 			if (s.length() >= M) {
 				map.put(s, map.getOrDefault(s, 0) + 1);
-				set.add(s);
+				words.add(s);
 			}
 		}
-		ArrayList<String> words = new ArrayList<>(set);
 		words.stream().sorted(new Comparator<>() {
 			@Override
 			public int compare(String o1, String o2) {
