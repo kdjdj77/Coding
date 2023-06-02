@@ -33,22 +33,22 @@ package q11_재귀함수.a_4779;
  */
 
 import java.io.*;
-import java.util.Arrays;
  
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		String S;
-		while((S = br.readLine()) != null) {
-			int N = Integer.parseInt(S), len = (int)Math.pow(3, N);
-			char[] c = new char[len];
-			Arrays.fill(c, '-');
-			sb.append(new String(can(c, N))).append("\n");
-		}
+		String in;
+		while((in = br.readLine()) != null)
+			sb.append(can((int)Math.pow(3, Integer.parseInt(in)))).append("\n");
+		System.out.print(sb);
 	}
-	private static char[] can(char[] c, int depth) {
-		if (depth == 0) return c;
-		
+	private static String can(int N) {
+		if (N == 1) return "-";
+		String s = can(N/3);
+		return new StringBuilder().append(s).append(" ".repeat(N/3)).append(s).toString();
 	}
 }
+
+
+
