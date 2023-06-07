@@ -14,13 +14,14 @@ public class Main {
             ArrayList<Integer>[] link = new ArrayList[N + 1];
             int[] cost = new int[++N], need = new int[N];
             st = new StringTokenizer(br.readLine());
-            for(int i = 1; i < N; i++) cost[i] = Integer.parseInt(st.nextToken());
-            for(int i = 1; i < N; i++) link[i] = new ArrayList<>();
+            for(int i = 1; i < N; i++) {
+                cost[i] = Integer.parseInt(st.nextToken());
+                link[i] = new ArrayList<>();
+            }
             while(K-- > 0) {
                 st = new StringTokenizer(br.readLine());
                 int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
-                link[a].add(b);
-                need[b]++;
+                link[a].add(b); need[b]++;
             }
             int W = Integer.parseInt(br.readLine()), dp[] = new int[N];
             Queue<Integer> q = new LinkedList<>();
