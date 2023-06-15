@@ -1,4 +1,4 @@
-package q00_ETC.a1202;
+package q00_ETC.rank5p.a1202;
 /*
 문제
 세계적인 도둑 상덕이는 보석점을 털기로 결심했다.
