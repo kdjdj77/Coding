@@ -11,13 +11,12 @@ public class Main {
         	boolean[] visit = new boolean[N+1];
         	StringTokenizer st = new StringTokenizer(br.readLine());
         	for(int i = 1; i <= N; i++) stu[i] = Integer.parseInt(st.nextToken());
-        	for(int start = 1; start <= N; start++) {
-        		if (visit[start]) continue;
-        		visit[start] = true;
-        		int cur = start;
-        		Queue<Integer> q = new LinkedList<>(List.of(start));
-        		while(!visit[stu[cur]]) {visit[cur = stu[cur]] = true; q.add(cur);}
-        		while(!q.isEmpty() && q.poll() != stu[cur]) res++;
+        	for(int s = 1; s <= N; s++) {
+        		if (visit[s]) continue;
+        		visit[s] = true;
+        		int cur = s;
+        		while(!visit[stu[cur]]) visit[cur = stu[cur]] = true;
+        		for(int i = s; i != stu[cur]; i = stu[i]) res++;
         	}
         	sb.append(res).append("\n");
         }
