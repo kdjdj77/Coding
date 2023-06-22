@@ -2,19 +2,22 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, cmd[], dp[][][];
-	static int[][] move = {{1,2,2,2,2},{2,1,3,4,3},{2,3,1,3,4},{2,4,3,1,3},{2,3,4,3,1}};
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        cmd = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        dp = new int[5][5][N = cmd.length-1];
-        System.out.println(res(0, 0, 0)-1);
+        int[] cmds = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[][] move = {{1,2,2,2,2},{2,1,3,4,3},{2,3,1,3,4},{2,4,3,1,3},{2,3,4,3,1}};
+        int cur = 0, INF = 4567890, dir[] = new int[5];
+        for(int i = 1; i < 5; i++) dir[i] = INF;
+        for(int cmd : cmds) {
+        	if (cmd == 0) break;
+            int min = INF, cost = move[cur][cmd];
+            for(int i = 0; i < 5; i++) {
+                min = Math.min(min, dir[i]+move[i][cmd]);
+                dir[i] += cost;
+            }
+            dir[cur] = min;
+            cur = cmd;
+        }
+        System.out.print(Arrays.stream(dir).min().orElse(0));
     }
-    static int res(int idx, int l, int r) {
-		if(idx == N) return 1;
-		if(dp[l][r][idx] != 0) return dp[l][r][idx];
-		int lp = move[l][cmd[idx]] + res(idx+1, cmd[idx], r);
-		int rp = move[r][cmd[idx]] + res(idx+1, l, cmd[idx]);
-		return dp[l][r][idx] = Math.min(lp, rp);
-	}
 }
