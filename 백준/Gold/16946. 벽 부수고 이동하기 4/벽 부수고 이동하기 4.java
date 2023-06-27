@@ -19,27 +19,25 @@ public class Main {
 		for(int i = 0; i < N; i++, sb.append("\n")) for(int j = 0; j < M; j++) sb.append(res(i, j));
 		System.out.print(sb);
 	}
+	static boolean isValid(int x, int y) {return x >= 0 && y >= 0 && x < N && y < M;}
+	static int dfs(int x, int y, int num) {
+		int res = 1;
+		map[x][y] = num;
+		for(int[] d : dir) {
+			int x1 = x+d[0], y1 = y+d[1];
+			if (isValid(x1, y1) && map[x1][y1] == -1) res += dfs(x1, y1, num);
+		}
+		return res;
+	}
 	static int res(int x, int y) {
 		if (map[x][y] != 0) return 0;
 		int res = 1;
 		Set<Integer> nearby = new HashSet<>();
 		for(int d[] : dir) {
 			int x1 = x+d[0], y1 = y+d[1];
-			if (x1 < 0 || y1 < 0 || x1 >= N || y1 >= M || map[x1][y1] == 0) continue;
-			nearby.add(map[x1][y1]);
+			if (isValid(x1, y1) && map[x1][y1] != 0) nearby.add(map[x1][y1]);
 		}
 		for(int num : nearby) res += set.get(num);
 		return res % 10;
-	}
-	static int dfs(int x, int y, int num) {
-		int res = 1;
-		map[x][y] = num;
-		for(int[] d : dir) {
-			int x1 = x+d[0], y1 = y+d[1];
-			if (x1 < 0 || y1 < 0 || x1 >= N || y1 >= M) continue;
-			if (map[x1][y1] != -1) continue;
-			res += dfs(x1, y1, num);
-		}
-		return res;
 	}
 }
