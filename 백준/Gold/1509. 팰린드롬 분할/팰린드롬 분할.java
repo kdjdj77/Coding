@@ -1,19 +1,21 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
 	static char[] str;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int len = (str = br.readLine().toCharArray()).length, dp[] = new int[len+1];
-		boolean[][] isP = new boolean[len+1][len+1];
-		for(int i = 1; i <= len; i++) dp[i] = 3456;
-		for(int s = 1; s <= len; s++) for(int e = s; e <= len; e++) isP[s][e] = isP(s-1, e-1);
-		for(int e = 1; e <= len; e++) for(int s = 1; s <= e; s++)
-			if (isP[s][e]) dp[e] = Math.min(dp[s-1]+1, dp[e]);
-		System.out.print(dp[len]);
-	}
-	static boolean isP(int s, int e) {
-		while(s <= e) if (str[s++] != str[e--]) return false;
-		return true;
-	}
+	static int len, dp[];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Arrays.fill(dp = new int[len = (str = br.readLine().toCharArray()).length], len);
+        dp[dp[0] = 1] = str[0] == str[1] ? 1 : 2;
+        for(int i = 2; i < len; i++) {
+            dp[i] = Math.min(dp[i-1]+1, dp[i]);
+            for(int j = 0; j < 2; j++) if (str[i] == str[i-1-j]) pal(i-j, i-1);
+        }
+        System.out.print(dp[len-1]);
+    }
+    static void pal(int s, int e) {
+        while(0 < s && e < len-1 && str[--s] == str[++e])
+            dp[e] = s == 0 ? 1 : Math.min(dp[e], dp[s-1]+1);
+    }
 }
