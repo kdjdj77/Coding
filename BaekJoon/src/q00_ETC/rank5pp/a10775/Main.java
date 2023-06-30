@@ -23,16 +23,21 @@ package q00_ETC.rank5pp.a10775;
 */
 
 import java.io.*;
-import java.util.*;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static int[] root;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int G = in(), P = in(), g[] = new int[P];
-		for(int i = 0; i < P; i++) g[i] = in();
-		
-		
+		int G = Integer.parseInt(br.readLine()), P = Integer.parseInt(br.readLine()), res = 0;
+		root = new int[++G];
+		while(G-- > 0) root[G] = G;
+		while(P-- > 0) {
+			int gi = Integer.parseInt(br.readLine()), empty = find(gi);
+			if (empty == 0) break;
+			res++;
+			root[empty] = empty-1;
+		}
+		System.out.print(res);
 	}
-	static int in() throws IOException {return Integer.parseInt(br.readLine());}
+	static int find(int x) {return x == root[x] ? x : (root[x] = find(root[x]));}
 }
