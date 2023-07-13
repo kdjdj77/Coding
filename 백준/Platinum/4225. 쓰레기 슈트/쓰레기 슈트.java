@@ -53,7 +53,7 @@ public class Main {
 		}
 		System.out.print(sb);
 	}
-	public static double deg(Dot d){
+	static double deg(Dot d){
 		if (root.x == d.x && root.y == d.y) return 7;
         double p12 = Math.pow(root.x+1, 2);
         double p23 = Math.pow(root.x-d.x, 2) + Math.pow(root.y-d.y, 2);
