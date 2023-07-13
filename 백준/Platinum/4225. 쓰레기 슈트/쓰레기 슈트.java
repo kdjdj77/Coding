@@ -2,27 +2,33 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st = new StringTokenizer("");
-	static Dot root;
 	static class Dot implements Comparable<Dot> {
 		double x, y, deg;
 		Dot(double a, double b) {x = a; y = b;}
-		@Override 
+		@Override
 		public int compareTo(Dot o) {
 			int comp = Double.compare(o.deg, this.deg);
-			if (comp == 0) return Double.compare(dist(root, o), dist(root, this));
-			return comp;
+			if (comp != 0) return comp;
+			return Double.compare(dist(root, o), dist(root, this));
 		}
 	}
+	static Dot root;
 	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
+		StringTokenizer st;
 		int N, tc = 0;
 		while((N = Integer.parseInt(br.readLine())) != 0) {
 			tc++;
 			root = new Dot(0, 10000);
 			Dot[] dots = new Dot[N];
-			for(int i = 0; i < N; i++) if ((dots[i] = new Dot(in(), in())).y <= root.y) root = dots[i];
+			for(int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				int x = Integer.parseInt(st.nextToken());
+				int y = Integer.parseInt(st.nextToken());
+				dots[i] = new Dot(x, y);
+				if (dots[i].y <= root.y) root = dots[i];
+			}
 			for(int i = 0; i < N; i++) dots[i].deg = deg(dots[i]);
 			Arrays.sort(dots);
 			Stack<Dot> s = new Stack<>(); s.push(dots[0]); s.push(dots[1]);
@@ -47,10 +53,6 @@ public class Main {
 		}
 		System.out.print(sb);
 	}
-	static double in() throws IOException {
-    	if (!st.hasMoreTokens()) st = new StringTokenizer(br.readLine());
-    	return Double.parseDouble(st.nextToken());
-    }
 	public static double deg(Dot d){
 		if (root.x == d.x && root.y == d.y) return 7;
         double p12 = Math.pow(root.x+1, 2);
