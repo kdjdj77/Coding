@@ -15,43 +15,25 @@ package q00_ETC.rank6p.a2042;
 import java.io.*;
 import java.util.*;
 
-class Tree {
-    int len;
-    long[] tree;
-    Tree(int s){tree = new long[len = s];}
-    void update(int idx, long value) {while(idx < len) {tree[idx] += value; idx += (idx & -idx);}}
-    long res(int idx) {
-        long sum = 0;
-        while(idx > 0) {
-            sum += tree[idx];
-            idx -= (idx & -idx);
-        }
-        return sum;
-    }
-}
 public class Main {
-    public static void main(String[] args) {
-        StringBuilder sb = new StringBuilder();
-        Reader fr = new Reader();
-        int N = fr.nextInt(), MK = fr.nextInt() + fr.nextInt();
-        long[] num = new long[N+1];
-        Tree tree = new Tree(N+1);
-        for(int i = 1; i <= N; i++) tree.update(i, num[i] = fr.nextLong());
-        for(int i = 0; i < MK; i++){
-            int a = fr.nextInt(), b = fr.nextInt();
-            if (a == 1) {
-                long c = fr.nextLong(), dif = c - num[b];
-                num[b] = c;
-                tree.update(b, dif);
-            } else sb.append(tree.res(fr.nextInt()) - tree.res(b-1)).append('\n');
+	static int N, M;
+	static long[] num, tree;
+	static StringTokenizer st;
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        StringBuilder sb = new StringBuilder(); st();
+        N = in(); M = in() + in(); num = new long[N+1]; tree = new long[N+1];
+        for(int i = 1; i <= N; i++) set(i, num[i] = Long.parseLong(br.readLine()));
+        while(M-- > 0) {st();
+        	int a = in(), b = in();
+            if (a == 2) {sb.append(res(in()) - res(b-1)).append("\n"); continue;}
+            long c = Long.parseLong(st.nextToken()), dif = c - num[b]; num[b] = c;
+            set(b, dif);
         }
         System.out.print(sb);
     }
-}
-class Reader {
-	BufferedReader br; StringTokenizer st;
-    Reader(){br=new BufferedReader(new InputStreamReader(System.in));}
-    String nextStr(){if(st==null||!st.hasMoreTokens())try{st=new StringTokenizer(br.readLine());}catch(IOException e){}return st.nextToken();}
-    int nextInt(){return Integer.parseInt(nextStr());}
-    long nextLong(){return Long.parseLong(nextStr());}
+    static int in() {return Integer.parseInt(st.nextToken());}
+    static void st() throws IOException {st = new StringTokenizer(br.readLine());}
+    static void set(int n, long dif) {for(;n <= N; n += n & -n) tree[n] += dif;}
+    static long res(int n) {long rt = 0; for(;n > 0; n -= n & -n) rt += tree[n]; return rt;}
 }
