@@ -1,17 +1,16 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-	public static void main(String[] args) throws IOException {
+public class Main{
+	public static void main(String[] args)throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int next = 1; br.readLine();
-		Stack<Integer> s = new Stack<>();
+		int N = Integer.parseInt(br.readLine()), n = 1, S[] = new int[1001], i = -1;
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		while(st.hasMoreTokens()) {
-			while(!s.isEmpty() && s.peek() == next) {s.pop(); next++;}
-			s.push(Integer.parseInt(st.nextToken()));
-			while(!s.isEmpty() && s.peek() == next) {s.pop(); next++;}
+		while(N-- > 0) {
+			while(i >= 0 && S[i] == n) {i--; n++;}
+			S[++i] = Integer.parseInt(st.nextToken());
 		}
-		System.out.print(s.isEmpty() ? "Nice" : "Sad");
+		while(i >= 0 && S[i] == n) {i--; n++;}
+		System.out.print(i == -1 ? "Nice" : "Sad");
 	}
 }
