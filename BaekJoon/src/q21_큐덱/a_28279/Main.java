@@ -1,4 +1,4 @@
-package q20_스택.a_28279;
+package q21_큐덱.a_28279;
 /*
 문제
 정수를 저장하는 덱을 구현한 다음, 입력으로 주어지는 명령을 처리하는 프로그램을 작성하시오.
@@ -29,30 +29,26 @@ import java.io.*;
 import java.util.*;
 
 public class Main{
-	static int deque[] = new int[1], idx = 0, s = -1, e = 1;
+	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
+		Deque<Integer> dq = new LinkedList<>();
 		int N = Integer.parseInt(br.readLine());
 		while(N-- > 0) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
+			boolean E = dq.isEmpty();
 			switch(Integer.parseInt(st.nextToken())) {
-			case 1:break;
-			case 2:break;
-			case 3:break;
-			case 4:break;
-			case 5:break;
-			case 6:break;
-			case 7:break;
-			case 8:break;
-			
+			case 1: dq.addFirst(Integer.parseInt(st.nextToken())); break;
+			case 2: dq.addLast(Integer.parseInt(st.nextToken())); break;
+			case 3: out(E?-1:dq.pollFirst()); break;
+			case 4: out(E?-1:dq.pollLast()); break;
+			case 5: out(dq.size()); break;
+			case 6: out(E?1:0); break;
+			case 7: out(E?-1:dq.peekFirst()); break;
+			case 8: out(E?-1:dq.peekLast()); break;
 			}
 		}
-		
+		System.out.print(sb);
 	}
-	static void resizeF() {
-		int len = deque.length;
-		int newDeque[] = new int[len<<1];
-		for(int i = 0; i < len; i++) newDeque[i+len] = deque[i];
-	}
+	static void out(int n) {sb.append(n).append("\n");}
 }
