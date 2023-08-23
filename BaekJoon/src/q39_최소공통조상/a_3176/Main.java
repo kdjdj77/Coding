@@ -65,11 +65,14 @@ public class Main {
 			max = Math.max(max, l[a][h]);
 			a = p[a][h];
 		}
-		if (a != b) for(int h = log2-1; h >= 0; h--) if (h == 0 || p[a][h] != p[b][h]) {
+		if (a == b) return new StringBuilder().append(min).append(" ").append(max).toString();
+		for(int h = log2-1; h >= 0; h--) if (p[a][h] != p[b][h]) {
 			min = Math.min(min, Math.min(s[a][h], s[b][h]));
 			max = Math.max(max, Math.max(l[a][h], l[b][h]));
 			a = p[a][h]; b = p[b][h];
 		}
+		min = Math.min(min, Math.min(s[a][0], s[b][0]));
+		max = Math.max(max, Math.max(l[a][0], l[b][0]));
 		return new StringBuilder().append(min).append(" ").append(max).toString();
 	}
 }
