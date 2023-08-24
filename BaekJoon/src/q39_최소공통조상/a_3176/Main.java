@@ -41,10 +41,10 @@ public class Main {
 			tree[b].add(new Node(a, c));
 		}
 		set(1, 1);
-		for(int i = 1; i < log2; i++) for(int j = 1; j <= N; j++) {
-			p[j][i] = p[p[j][i-1]][i-1];
-			s[j][i] = Math.min(s[j][i-1], s[p[j][i-1]][i-1]);
-			l[j][i] = Math.max(l[j][i-1], l[p[j][i-1]][i-1]);
+		for(int h = 1; h < log2; h++) for(int j = 1; j <= N; j++) {
+			p[j][h] = p[p[j][h-1]][h-1];
+			s[j][h] = Math.min(s[j][h-1], s[p[j][h-1]][h-1]);
+			l[j][h] = Math.max(l[j][h-1], l[p[j][h-1]][h-1]);
 		}
 		for(int K = r.in(); K > 0; K--) sb.append(res(r.in(), r.in())).append("\n");
 		System.out.print(sb);
