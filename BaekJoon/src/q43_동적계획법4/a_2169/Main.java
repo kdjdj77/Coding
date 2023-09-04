@@ -1,47 +1,40 @@
 package q43_동적계획법4.a_2169;
 /*
 문제
-N개의 도시와 그 도시를 연결하는 N-1개의 도로로 이루어진 도로 네트워크가 있다. 
+아래 그림과 같이 N개의 회전이 가능한 숫자 나사가 아래위로 연결되어 있다. 가장 위에 있는 숫자나사는 숫자나사 1이고 가장 아래에 있는 숫자나사는 숫자나사 N이다. 모든 숫자나사는 각각 10개의 면을 가지고 있고, 각 면에는 오른쪽 방향으로 0, 1, 2, 3, …, 9까지의 숫자가 하나씩 순서대로 적혀 있다. 하나의 숫자나사를 왼쪽으로 회전 시키면, 이 나사보다 아래에 위치한 모든 나사는 같이 따라서 돌게 되지만, 나사를 오른쪽으로 회전시키면, 다른 나사는 함께 돌지는 않는다. 정면에서 보아 위에서부터 아래쪽으로 숫자를 읽어 내려간다고 할 때, 현재의 상태에서 가장 적은 칸수의 움직임으로 원하는 숫자를 만들기 위한 방법을 출력하는 프로그램을 작성하라.
 
-모든 도시의 쌍에는 그 도시를 연결하는 유일한 경로가 있고, 각 도로의 길이는 입력으로 주어진다.
+예를 들어 세 개의 숫자나사가 주어졌을 때, 정면에서 보는 현재 상태가 326이고 원하는 상태는 446이라면 최소 회전 칸수는 4이다. 먼저 숫자나사 1을 왼쪽으로 한 칸 돌리면 437이 되고, 숫자나사 2를 역시 왼쪽으로 한 칸 돌리면 448이 되며, 마지막으로 숫자나사 3을 오른쪽으로 두 칸 돌리면 446이 된다.
 
-총 K개의 도시 쌍이 주어진다. 이때, 두 도시를 연결하는 경로 상에서 가장 짧은 도로의 길이와 가장 긴 도로의 길이를 구하는 프로그램을 작성하시오.
+
 
 입력
-첫째 줄에 N이 주어진다. (2 ≤ N ≤ 100,000)
-
-다음 N-1개 줄에는 도로를 나타내는 세 정수 A, B, C가 주어진다. A와 B사이에 길이가 C인 도로가 있다는 뜻이다. 도로의 길이는 1,000,000보다 작거나 같은 양의 정수이다.
-
-다음 줄에는 K가 주어진다. (1 ≤ K ≤ 100,000)
-
-다음 K개 줄에는 서로 다른 두 자연수 D와 E가 주어진다. D와 E를 연결하는 경로에서 가장 짧은 도로의 길이와 가장 긴 도로의 길이를 구해서 출력하면 된다.
+첫째 줄에는 숫자나사의 개수 N이 주어지고, 둘째 줄에는 현재의 상태가, 셋째 줄에는 원하는 상태가 주어진다. N은 3 이상이고 10,000 이하이다.
 
 출력
-총 K개 줄에 D와 E를 연결하는 경로에서 가장 짧은 도로의 길이와 가장 긴 도로의 길이를 출력한다.
+첫째 줄에는 현재 상태에서 원하는 상태로 도달하는데 필요한 최소 회전 칸수를 출력한다.
 */
 
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
-		int[][] map = new int[N][M], dp = new int[N][M];
-		for(int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < M; j++) map[i][j] = Integer.parseInt(st.nextToken());
-		}
-		dp[0][0] = map[0][0];
-		for(int i = 1; i < M; i++) dp[0][i] = dp[0][i-1] + map[0][i];
-		for(int i = 1, R[] = new int[M], L[] = new int[M]; i < N; i++) {
-			R[0] = map[i][0] + dp[i-1][0];
-			L[M-1] = map[i][M-1] + dp[i-1][M-1];
-			for(int j = 1; j < M; j++) R[j] = map[i][j] + Math.max(R[j-1], dp[i-1][j]);
-			for(int j = M-2; j >= 0; j--) L[j] = map[i][j] + Math.max(L[j+1], dp[i-1][j]);
-			for(int j = 0; j < M; j++) dp[i][j] = Math.max(R[j], L[j]);
-		}
-		System.out.print(dp[N-1][M-1]);
-	}	
+	static int dp[][]; 
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine()), res = 0;
+        dp = new int[10][10];
+        int[] a = Arrays.stream(br.readLine().split("")).mapToInt(Integer::parseInt).toArray();
+        for(int i = 0, tm = 0, mov; i < N; i++) {
+        	res += Math.abs(mov = dist(a[i] + tm, br.read()-'0'));
+        	tm += mov;
+        }
+        System.out.print(res);
+    }
+    static int dist(int a, int b) {
+    	if (a == b) return 0;
+    	if (a > b) {int tmp = a; a = b; b = tmp;}
+    	if (dp[a][b] != 0) return dp[a][b];
+    	int res = b - a;
+    	return dp[a][b] = res > 5 ? res - 10 : res;
+    }
 }
