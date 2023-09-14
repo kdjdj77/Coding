@@ -29,6 +29,8 @@ public class Main {
 	        	int numA = a.charAt(n)-'0', numB = b.charAt(n)-'0';
 	        	
 	        	
+	        	
+	        	
 	            int spin = (numA + 10 - ((numB + i) % 10)) % 10;
 	            dp[n][i] = Math.min(dp[n+1][(spin+i)%10]+spin, dp[n+1][i]+10-spin);
             }
