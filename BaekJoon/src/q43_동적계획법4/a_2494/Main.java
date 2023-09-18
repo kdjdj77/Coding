@@ -18,26 +18,39 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int MAX = Integer.MAX_VALUE;
+	static int N, dp[][] = new int[10][10002];
+	static String S, D;
+	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		
-        int n = Integer.parseInt(br.readLine()), dp[][] = new int[n+1][10];
-        String a = br.readLine(), b = br.readLine();
-        while(n-- > 0) {
-        	for(int i = 0; i < 10; i++) {
-	        	int numA = a.charAt(n)-'0', numB = b.charAt(n)-'0';
-	        	
-	        	
-	        	
-	        	
-	            int spin = (numA + 10 - ((numB + i) % 10)) % 10;
-	            dp[n][i] = Math.min(dp[n+1][(spin+i)%10]+spin, dp[n+1][i]+10-spin);
-            }
-        	
-        }
-        System.out.print(dp[0][0]);
-		
-		
-	}	
+		for(int i = 0; i < 10; i++) Arrays.fill(dp[i], -1);
+        N = Integer.parseInt(br.readLine());
+        S = br.readLine();
+        D = br.readLine();
+        sb.append(dfs(0, 0)).append("\n");
+        backTracking(0, 0);
+        System.out.print(sb);
+	}
+	static int dfs(int here, int turns) {
+		if (here == N) return dp[turns][here] = 0;
+		int ret = dp[turns][here];
+		if (ret != -1) return ret;
+		ret = MAX;
+		int df = (20+((int)(D.charAt(here)-'0')-(int)(S.charAt(here)-'0'))-turns)%10;
+		ret = Math.min(ret, dfs(here + 1, (df+turns)%10) + df);
+		ret = Math.min(ret, dfs(here + 1, turns) + (10-df)%10);
+		return ret;
+	}
+	static void backTracking(int here, int turns) {
+		if (here == N) return;
+		int df = (20+((int)(D.charAt(here)-'0')-(int)(S.charAt(here)-'0'))-turns)%10;
+		if (dp[turns][here+1] != -1 && dp[turns][here]-dp[turns][here+1] == (10-df)%10) {
+			sb.append(here+1).append(" ").append(-(10-df)%10).append("\n");
+			backTracking(here+1, turns);
+		} else {
+			sb.append(here+1).append(" ").append(df).append("\n");
+			backTracking(here+1, (10+df+turns)%10);
+		}
+	}
 }
