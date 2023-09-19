@@ -38,8 +38,8 @@ public class Main {
 		if (ret != -1) return ret;
 		ret = MAX;
 		int df = (20+((int)(D.charAt(here)-'0')-(int)(S.charAt(here)-'0'))-turns)%10;
-		ret = Math.min(ret, dfs(here + 1, (df+turns)%10) + df);
-		ret = Math.min(ret, dfs(here + 1, turns) + (10-df)%10);
+		ret = Math.min(ret, dfs(here + 1, (df + turns) % 10) + df);
+		ret = Math.min(ret, dfs(here + 1, turns) + (10 - df) % 10);
 		return ret;
 	}
 	static void backTracking(int here, int turns) {
