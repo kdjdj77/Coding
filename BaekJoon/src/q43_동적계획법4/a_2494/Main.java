@@ -26,8 +26,7 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		for(int i = 0; i < 10; i++) Arrays.fill(dp[i], -1);
         N = Integer.parseInt(br.readLine());
-        S = br.readLine();
-        D = br.readLine();
+        S = br.readLine(); D = br.readLine();
         sb.append(dfs(0, 0)).append("\n");
         backTracking(0, 0);
         System.out.print(sb);
