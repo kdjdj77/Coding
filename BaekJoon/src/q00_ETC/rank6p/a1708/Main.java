@@ -25,57 +25,98 @@ package q00_ETC.rank6p.a1708;
 import java.io.*;
 import java.util.*;
 
+class Point {
+    long x;
+    long y;
+
+    Point(long x, long y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 public class Main {
-	static Dot root;
-	static class Dot implements Comparable<Dot> {
-		double x, y, deg;
-		Dot(double a, double b) {x = a; y = b;}
-		@Override
-		public int compareTo(Dot o) {
-			int comp = Double.compare(o.deg, this.deg);
-			if (comp != 0) return comp;
-			return Double.compare(dist(root, o), dist(root, this));
-		}
-	}
     public static void main(String[] args) throws IOException {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	int N = Integer.parseInt(br.readLine());
-    	root = new Dot(0, 40000);
-		Dot[] dots = new Dot[N];
-		for(int i = 0; i < N; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			dots[i] = new Dot(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-			if (dots[i].y <= root.y) root = dots[i];
-		}
-		for(int i = 0; i < N; i++) dots[i].deg = deg(dots[i]);
-		Arrays.sort(dots);
-		Stack<Dot> s = new Stack<>() {{push(dots[0]); push(dots[1]);}};
-		for(int i = 2; i < N; i++) {
-			Dot cur = s.pop(), before = s.peek(), next = dots[i];
-			if (ccw(before, cur, next) <= 0) i--;
-			else {s.push(cur); s.push(next);}
-		}
-		Dot cur = s.pop(), before = s.peek(), next = dots[0];
-		if (ccw(before, cur, next) > 0) s.push(cur);
-    	System.out.print(s.size());        
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int N = Integer.parseInt(br.readLine());
+        ArrayList<Point> points = new ArrayList<>();
+
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+
+            points.add(new Point(x, y));
+        }
+
+        bw.write(grahamScan(points) + "\n");
+
+        br.close();
+        bw.flush();
+        bw.close();
     }
-    static int in(String s) {return Integer.parseInt(s);}
-    static double dist(Dot a, Dot b) {return Math.sqrt(Math.pow(a.x-b.x, 2) + Math.pow(a.y-b.y, 2));}
-    static double deg(Dot d){
-		if (root.x == d.x && root.y == d.y) return 7;
-        double p12 = Math.pow(root.x+1, 2);
-        double p23 = Math.pow(root.x-d.x, 2) + Math.pow(root.y-d.y, 2);
-        double p31 = Math.pow(d.x+1, 2) + Math.pow(d.y-root.y, 2);
-        return Math.acos((p12+p23-p31) / (2*Math.sqrt(p12)*Math.sqrt(p23)));
+
+    static Point root = new Point(Long.MAX_VALUE, Long.MAX_VALUE);
+
+    static int grahamScan(ArrayList<Point> input) {
+        for (int i = 0; i < input.size(); i++) {
+            if (input.get(i).y < root.y) {
+                root = input.get(i);
+            } else if (input.get(i).y == root.y) {
+                if (input.get(i).x < root.x) {
+                    root = input.get(i);
+                }
+            }
+        }
+        input.sort(new Comparator<Point>() {
+            @Override
+            public int compare(Point p1, Point p2) {
+                int result = ccw(root, p1, p2);
+
+                if (result > 0) {
+                    return -1;
+                } else if (result < 0) {
+                    return 1;
+                } else {
+                    long distance1 = dist(root, p1);
+                    long distance2 = dist(root, p2);
+
+                    if (distance1 > distance2) {
+                        return 1;
+                    }
+                }
+                return -1;
+            }
+        });
+
+        Stack<Point> stack = new Stack<>();
+        stack.add(root);
+
+        for (int i = 1; i < input.size(); i++) {
+            while (stack.size() > 1 && (ccw(stack.get(stack.size() - 2), stack.get(stack.size() - 1), input.get(i)) <= 0)) {    // first, second, next
+                stack.pop();
+            }
+            stack.add(input.get(i));
+        }
+
+        return stack.size();
     }
-    static double dist(Dot a, Dot l1, Dot l2) {
-		double X, Y, dx = l1.x-l2.x, dy = l1.y-l2.y;
-		if (dx == 0) {X = l1.x; Y = a.y;}
-		else if (dy == 0) {X = a.x; Y = l1.y;}
-		else {X = (dx/dy*a.x + dy/dx*l1.x + a.y - l1.y)/(dx/dy + dy/dx); Y = dy/dx*(X-l1.x) + l1.y;}
-		return dist(a, new Dot(X, Y));
-	}
-	static double ccw(Dot a, Dot b, Dot c) {
-        return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - c.x*b.y - b.x*a.y;
+
+    static int ccw(Point p1, Point p2, Point p3) {
+        long result = (p1.x * p2.y + p2.x * p3.y + p3.x * p1.y) - (p2.x * p1.y + p3.x * p2.y + p1.x * p3.y);
+
+        if (result > 0) {
+        	return 1;
+        } else if (result < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    static long dist(Point p1, Point p2) {
+        return (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
     }
 }
