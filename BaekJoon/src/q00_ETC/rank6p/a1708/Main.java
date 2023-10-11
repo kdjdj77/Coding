@@ -25,98 +25,46 @@ package q00_ETC.rank6p.a1708;
 import java.io.*;
 import java.util.*;
 
-class Point {
-    long x;
-    long y;
-
-    Point(long x, long y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
 public class Main {
+	static Dot rt = new Dot(40001, 40001);
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
         int N = Integer.parseInt(br.readLine());
-        ArrayList<Point> points = new ArrayList<>();
-
-        for (int i = 0; i < N; i++) {
+        Dot[] dots = new Dot[N];
+        for(int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-
-            points.add(new Point(x, y));
+            int x = Integer.parseInt(st.nextToken()), y = Integer.parseInt(st.nextToken());
+            dots[i] = new Dot(x, y);
         }
-
-        bw.write(grahamScan(points) + "\n");
-
-        br.close();
-        bw.flush();
-        bw.close();
-    }
-
-    static Point root = new Point(Long.MAX_VALUE, Long.MAX_VALUE);
-
-    static int grahamScan(ArrayList<Point> input) {
-        for (int i = 0; i < input.size(); i++) {
-            if (input.get(i).y < root.y) {
-                root = input.get(i);
-            } else if (input.get(i).y == root.y) {
-                if (input.get(i).x < root.x) {
-                    root = input.get(i);
-                }
-            }
+        for(int i = 0; i < N; i++) {
+            if (dots[i].y < rt.y) {rt = dots[i]; continue;}
+            if (dots[i].x < rt.x && dots[i].y == rt.y) rt = dots[i];
         }
-        input.sort(new Comparator<Point>() {
+        Arrays.sort(dots, new Comparator<Dot>() {
             @Override
-            public int compare(Point p1, Point p2) {
-                int result = ccw(root, p1, p2);
-
-                if (result > 0) {
-                    return -1;
-                } else if (result < 0) {
-                    return 1;
-                } else {
-                    long distance1 = dist(root, p1);
-                    long distance2 = dist(root, p2);
-
-                    if (distance1 > distance2) {
-                        return 1;
-                    }
-                }
-                return -1;
+            public int compare(Dot d1, Dot d2) {
+                int res = ccw(rt, d1, d2);
+                if (res == 0) return dist(rt, d1) >= dist(rt, d2) ? 1 : -1;
+                return res > 0 ? -1 : 1;
             }
         });
-
-        Stack<Point> stack = new Stack<>();
-        stack.add(root);
-
-        for (int i = 1; i < input.size(); i++) {
-            while (stack.size() > 1 && (ccw(stack.get(stack.size() - 2), stack.get(stack.size() - 1), input.get(i)) <= 0)) {    // first, second, next
-                stack.pop();
-            }
-            stack.add(input.get(i));
+        Stack<Dot> s = new Stack<>() {{add(rt);}};
+        for(int i = 1; i < N; s.add(dots[i++])) while(s.size() > 1) {
+        	Dot cur = s.pop(), before = s.peek();
+        	if (ccw(before, cur, dots[i]) > 0) {s.add(cur); break;}
         }
-
-        return stack.size();
+        System.out.print(s.size());
     }
-
-    static int ccw(Point p1, Point p2, Point p3) {
-        long result = (p1.x * p2.y + p2.x * p3.y + p3.x * p1.y) - (p2.x * p1.y + p3.x * p2.y + p1.x * p3.y);
-
-        if (result > 0) {
-        	return 1;
-        } else if (result < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
+    static int ccw(Dot p1, Dot p2, Dot p3) {
+        long res = p1.x*p2.y + p2.x*p3.y + p3.x*p1.y - p2.x*p1.y - p3.x*p2.y - p1.x*p3.y;
+        return res == 0 ? 0 : res > 0 ? 1 : -1;
     }
-
-    static long dist(Point p1, Point p2) {
-        return (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
+    static long dist(Dot p1, Dot p2) {
+    	long dx = p2.x-p1.x, dy = p2.y-p1.y;
+        return dx*dx + dy*dy;
+    }
+    static class Dot {
+        int x, y;
+        Dot(int x, int y) {this.x = x; this.y = y;}
     }
 }
