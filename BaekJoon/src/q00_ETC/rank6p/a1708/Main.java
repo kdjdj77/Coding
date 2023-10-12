@@ -44,7 +44,11 @@ public class Main {
             @Override
             public int compare(Dot d1, Dot d2) {
                 int res = ccw(rt, d1, d2);
-                if (res == 0) return dist(rt, d1) >= dist(rt, d2) ? 1 : -1;
+                if (res == 0) {
+                	long dist1 = dist(rt, d1), dist2 = dist(rt, d2);
+                	if (dist1 == dist2) return 0;
+                	return dist(rt, d1) > dist(rt, d2) ? 1 : -1;
+                }
                 return res > 0 ? -1 : 1;
             }
         });
