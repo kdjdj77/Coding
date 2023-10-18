@@ -24,63 +24,49 @@ package q00_ETC.rank6p.a1708;
 
 import java.io.*;
 import java.util.*;
+
 class Main{
-    static int n;
+    static int N;
     static Point first = new Point(40001, 40001);
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        n = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
         List<Point> points = new ArrayList<Point>();
-        for(int i=0; i<n; i++){
+        for(int i = 0; i < N; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
             points.add(new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
-        for(int i=0; i<points.size(); i++){
-            if(points.get(i).y < first.y){
-	            first = points.get(i);    
-            } else if(points.get(i).y == first.y){
-                if(points.get(i).x < first.x)
-                    first = points.get(i);
-            }
+        for(int i = 0; i < points.size(); i++){
+            if(points.get(i).y < first.y) {first = points.get(i); continue;}
+            if(points.get(i).y == first.y && points.get(i).x < first.x) first = points.get(i);
         }
         points.sort(new Comparator<Point>(){
             public int compare(Point second, Point third){
                 int ccwR = ccw(first, second, third);
-                if(ccwR > 0)
-                    return -1;
-                else if (ccwR < 0)
-                    return 1;
-                else if (ccwR == 0){
+                if (ccwR > 0) return -1;
+                else if (ccwR < 0) return 1;
+                else if (ccwR == 0) {
                     long distR1 = dist(first, second);
                     long distR2 = dist(first, third);
-                    if(distR1 > distR2)
-                        return 1;
+                    if (distR1 > distR2) return 1;
                 }
                 return -1;
             }
         });
-        Stack<Point> stack = new Stack<Point>();
-        stack.add(first);
-        for(int i=1; i<points.size(); i++) {
-            while(stack.size() > 1 && ccw(stack.get(stack.size()-2), stack.get(stack.size()-1), points.get(i)) <= 0){
-                stack.pop();
-            }
+        Stack<Point> stack = new Stack<Point>() {{add(first);}};
+        for(int i = 1; i < points.size(); i++) {
+        	if (stack.size() > 1) {
+        		int ccw = ccw(stack.get(stack.size()-2), stack.get(stack.size()-1), points.get(i));
+        		while(ccw <= 0) stack.pop();
+        	}
             stack.add(points.get(i));
         }
-        
-        bw.write(stack.size() + "\n");
-        
-        bw.flush();
-        br.close();
-        bw.close();
+        System.out.print(stack.size());
     }
     static int ccw(Point a, Point b, Point c){
         long ccwR = (a.x*b.y + b.x*c.y + c.x*a.y) - (b.x*a.y + c.x*b.y + a.x*c.y);
-        if(ccwR > 0)
-            return 1;
-        if(ccwR < 0)
-            return -1;
+        if (ccwR > 0) return 1;
+        if (ccwR < 0) return -1;
         return 0;
     }
     static long dist(Point a, Point b){
