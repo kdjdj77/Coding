@@ -26,57 +26,42 @@ import java.io.*;
 import java.util.*;
 
 class Main{
-    static int N;
-    static Point first = new Point(40001, 40001);
+    static class Dot{
+        long x, y;
+        public Dot(long x, long y) {this.x = x; this.y = y;}
+    }
+    static Dot root = new Dot(40001, 40001);
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        List<Point> points = new ArrayList<Point>();
+        int N = Integer.parseInt(br.readLine());
+        ArrayList<Dot> dots = new ArrayList<Dot>();
         for(int i = 0; i < N; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            points.add(new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+            dots.add(new Dot(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
-        for(int i = 0; i < points.size(); i++){
-            if(points.get(i).y < first.y) {first = points.get(i); continue;}
-            if(points.get(i).y == first.y && points.get(i).x < first.x) first = points.get(i);
+        for(Dot d : dots){
+            if (d.y < root.y) {root = d; continue;}
+            if (d.y == root.y && d.x < root.x) root = d;
         }
-        points.sort(new Comparator<Point>(){
-            public int compare(Point second, Point third){
-                int ccwR = ccw(first, second, third);
-                if (ccwR > 0) return -1;
-                else if (ccwR < 0) return 1;
-                else if (ccwR == 0) {
-                    long distR1 = dist(first, second);
-                    long distR2 = dist(first, third);
-                    if (distR1 > distR2) return 1;
-                }
-                return -1;
+        dots.sort(new Comparator<Dot>() {
+            public int compare(Dot d1, Dot d2){
+                int ccw = ccw(root, d1, d2);
+                if (ccw != 0) return ccw < 0 ? 1 : -1;
+                else return dist(root, d1) > dist(root, d2) ? 1 : -1;
             }
         });
-        Stack<Point> stack = new Stack<Point>() {{add(first);}};
-        for(int i = 1; i < points.size(); i++) {
-        	if (stack.size() > 1) {
-        		int ccw = ccw(stack.get(stack.size()-2), stack.get(stack.size()-1), points.get(i));
-        		while(ccw <= 0) stack.pop();
-        	}
-            stack.add(points.get(i));
+        Stack<Dot> s = new Stack<Dot>() {{add(root);}};
+        for(int i = 1; i < N; i++) {
+    		while(s.size() > 1 && ccw(s.get(s.size()-2), s.get(s.size()-1), dots.get(i)) <= 0) s.pop();
+            s.add(dots.get(i));
         }
-        System.out.print(stack.size());
+        System.out.print(s.size());
     }
-    static int ccw(Point a, Point b, Point c){
-        long ccwR = (a.x*b.y + b.x*c.y + c.x*a.y) - (b.x*a.y + c.x*b.y + a.x*c.y);
-        if (ccwR > 0) return 1;
-        if (ccwR < 0) return -1;
-        return 0;
+    static int ccw(Dot a, Dot b, Dot c){
+        long res = (a.x*b.y + b.x*c.y + c.x*a.y) - (b.x*a.y + c.x*b.y + a.x*c.y);
+        return res == 0 ? 0 : res > 0 ? 1 : -1;
     }
-    static long dist(Point a, Point b){
+    static long dist(Dot a, Dot b){
         return (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y);
-    }
-    static class Point{
-        long x, y;
-        public Point(long x, long y){
-            this.x = x;
-            this.y = y;
-        }
     }
 }
