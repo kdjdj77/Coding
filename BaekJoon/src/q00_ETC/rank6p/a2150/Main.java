@@ -28,9 +28,11 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         
         int V = Integer.parseInt(st.nextToken()), E = Integer.parseInt(st.nextToken());
+        int[] map = new int[E+1];
         for(int i = 0; i < E; i++) {
         	st = new StringTokenizer(br.readLine());
         	int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
+        	map[a] = b;
         }
     }
 }
