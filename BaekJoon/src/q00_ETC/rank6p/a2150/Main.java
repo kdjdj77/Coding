@@ -22,18 +22,49 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        
-        int V = Integer.parseInt(st.nextToken()), E = Integer.parseInt(st.nextToken());
-        ArrayList<Set<Integer>> map = new ArrayList<>();
-        for(int i = 0; i <= V; i++) map.add(new HashSet<>());
-        for(int i = 0; i < E; i++) {
-        	st = new StringTokenizer(br.readLine());
-        	int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
-        	map.get(a).add(b);
-        }
-    }
+	static int num = 0, id = 1;
+	static int[] count;
+	static boolean[] visit;
+	static ArrayList<Integer>[] map;
+	static Stack<Integer> s = new Stack<>();
+	static ArrayList<Queue<Integer>> result = new ArrayList<>();;
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		
+		int V = Integer.parseInt(st.nextToken()), E = Integer.parseInt(st.nextToken());
+		map = new ArrayList[V+1];
+		count = new int[V+1];
+		visit = new boolean[V+1];
+		for(int i = 1; i <= V; i++) map[i] = new ArrayList<>();
+		for(int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			map[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+		}
+		for(int i = 1; i <= V; i++) if (count[i] == 0) findSCC(i);
+		Collections.sort(result, (o1, o2) -> o1.peek() - o2.peek());
+		sb.append(id-1).append("\n");
+		for(Queue<Integer> q : result) {
+			while(!q.isEmpty())	sb.append(q.poll()).append(" ");
+			sb.append("-1\n");
+		}
+		System.out.print(sb);
+	}
+	static int findSCC(int cur) {
+		count[cur] = ++num;
+		s.add(cur);
+		int res = count[cur], tmp = 0;
+		for(int next : map[cur]) {
+			if (count[next] == 0) res = Math.min(res, findSCC(next));
+			else if (!visit[next]) res = Math.min(res, count[next]);
+		} 
+		if (res == count[cur]) {
+			Queue<Integer> pq = new PriorityQueue<>();
+			while(tmp != cur) visit[tmp = s.pop()] = pq.add(tmp);
+			result.add(pq);
+			id++;
+		}
+		return res;
+	}
 }
