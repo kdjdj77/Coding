@@ -22,49 +22,43 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int num = 0, id = 1;
-	static int[] count;
-	static boolean[] visit;
-	static ArrayList<Integer>[] map;
+	static ArrayList<Queue<Integer>> res = new ArrayList<>();
+	static ArrayList<Integer>[] map = new ArrayList[10001];
+	static int num = 0, cnt = 0, find[] = new int[10001];
+	static boolean[] visit = new boolean[10001];
 	static Stack<Integer> s = new Stack<>();
-	static ArrayList<Queue<Integer>> result = new ArrayList<>();;
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		StringBuilder sb = new StringBuilder();
-		
-		int V = Integer.parseInt(st.nextToken()), E = Integer.parseInt(st.nextToken());
-		map = new ArrayList[V+1];
-		count = new int[V+1];
-		visit = new boolean[V+1];
-		for(int i = 1; i <= V; i++) map[i] = new ArrayList<>();
+		int V = Integer.parseInt(st.nextToken())+1, E = Integer.parseInt(st.nextToken());
+		for(int i = 1; i < V; i++) map[i] = new ArrayList<>();
 		for(int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
 			map[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
 		}
-		for(int i = 1; i <= V; i++) if (count[i] == 0) findSCC(i);
-		Collections.sort(result, (o1, o2) -> o1.peek() - o2.peek());
-		sb.append(id-1).append("\n");
-		for(Queue<Integer> q : result) {
+		for(int i = 1; i < V; i++) if (find[i] == 0) scc(i);
+		res.sort((o1, o2) -> o1.peek() - o2.peek());
+		sb.append(cnt).append("\n");
+		for(Queue<Integer> q : res) {
 			while(!q.isEmpty())	sb.append(q.poll()).append(" ");
 			sb.append("-1\n");
 		}
 		System.out.print(sb);
 	}
-	static int findSCC(int cur) {
-		count[cur] = ++num;
+	static int scc(int cur) {
 		s.add(cur);
-		int res = count[cur], tmp = 0;
+		int ret = find[cur] = ++num, tmp = 0;
 		for(int next : map[cur]) {
-			if (count[next] == 0) res = Math.min(res, findSCC(next));
-			else if (!visit[next]) res = Math.min(res, count[next]);
+			if (find[next] == 0) ret = Math.min(ret, scc(next));
+			else if (!visit[next]) ret = Math.min(ret, find[next]);
 		} 
-		if (res == count[cur]) {
+		if (find[cur] == ret) {
 			Queue<Integer> pq = new PriorityQueue<>();
 			while(tmp != cur) visit[tmp = s.pop()] = pq.add(tmp);
-			result.add(pq);
-			id++;
+			res.add(pq);
+			cnt++;
 		}
-		return res;
+		return ret;
 	}
 }
