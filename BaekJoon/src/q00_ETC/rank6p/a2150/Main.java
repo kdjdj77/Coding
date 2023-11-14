@@ -44,7 +44,7 @@ public class Main {
 			while(!q.isEmpty())	sb.append(q.poll()).append(" ");
 			sb.append("-1\n");
 		}
-		System.out.print(sb);
+		System.out.print(sb); 
 	}
 	static int scc(int cur) {
 		s.add(cur);
