@@ -27,17 +27,32 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int N, W, map[][];
+	static boolean[][] visit;
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		int T = Integer.parseInt(br.readLine());
+		int T = Integer.parseInt(br.readLine()), res = 0;
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken()), W = Integer.parseInt(st.nextToken());
-		int[][] map = new int[2][N];
+		N = Integer.parseInt(st.nextToken());
+		W = Integer.parseInt(st.nextToken());
+		map = new int[2][N];
+		visit = new boolean[2][N];
 		for(int i = 0; i < 2; i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < N; j++) map[i][j] = Integer.parseInt(st.nextToken());
 		}
+		for(int i = 0; i < 2; i++) for(int j = 0; j < N; j++) {
+			if (!visit[i][j]) res += dfs(i, j);
+		}
+		System.out.print(res);
+	}
+	static int dfs(int x, int y) {
+		if (visit[x][y]) return 0;
+		int res = 0;
 		
+		
+		
+		return res;
 	}
 }
