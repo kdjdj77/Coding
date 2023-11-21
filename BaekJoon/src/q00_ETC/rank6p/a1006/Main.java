@@ -27,33 +27,88 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, W, map[][];
-	static boolean[][] visit;
-	public static void main(String[] args) throws IOException{
+	static int N, W, e[][];
+	static int[] a, b, c;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		int T = Integer.parseInt(br.readLine()), res = 0;
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		W = Integer.parseInt(st.nextToken());
-		map = new int[2][N];
-		visit = new boolean[2][N];
-		for(int i = 0; i < 2; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < N; j++) map[i][j] = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(br.readLine());
+		
+		for(int i = 0; i < T; i++) {
+			int result = 2147483647;
+			String[] temp = br.readLine().split(" ");
+			N = Integer.parseInt(temp[0]);
+			W = Integer.parseInt(temp[1]);
+			e = new int[2][N];
+			
+			for(int j = 0; j < 2; j++) {
+				temp = br.readLine().split(" ");
+				for(int k = 0; k < N; k++) {
+					e[j][k] = Integer.parseInt(temp[k]);
+				}
+			}
+			
+			a = new int[N];
+			b = new int[N];
+			c = new int[N + 1];
+			
+			a[0] = 1;
+			b[0] = 1;
+			c[0] = 0;
+			
+			solve(0);
+			
+			result = Math.min(result, c[N]);
+			if (N > 1) {
+				if (e[0][0] + e[0][N - 1] <= W && e[1][0] + e[1][N - 1] <= W) {
+					a[1] = 1;
+					b[1] = 1;
+					c[1] = 0;
+					solve(1);
+					
+					result = Math.min(result, c[N - 1] + 2);
+				}
+				if (e[0][0] + e[0][N - 1] <= W) {
+					a[1] = 2;
+					b[1] = e[1][0] + e[1][1] > W ? 2 : 1;
+					c[1] = 1;
+					solve(1);
+					
+					result = Math.min(result, b[N - 1] + 1);
+				}
+				if (e[1][0] + e[1][N - 1] <= W) {
+					a[1] = e[0][0] + e[0][1] > W ? 2 : 1;
+					b[1] = 2;
+					c[1] = 1;
+					solve(1);
+					
+					result = Math.min(result, a[N - 1] + 1);
+				}
+			}
+			
+			System.out.println(result);
 		}
-		for(int i = 0; i < 2; i++) for(int j = 0; j < N; j++) {
-			if (!visit[i][j]) res += dfs(i, j);
-		}
-		System.out.print(res);
+		
+		br.close();
 	}
-	static int dfs(int x, int y) {
-		if (visit[x][y]) return 0;
-		int res = 0;
-		
-		
-		
-		
-		return res;
+	static void solve(int num) {
+		for (int i = num; i < N; i++) {
+			c[i + 1] = Math.min(a[i] + 1, b[i] + 1);
+			if (e[0][i] + e[1][i] <= W) {
+				c[i + 1] = Math.min(c[i + 1], c[i] + 1);
+			}
+			if (i > 0 && e[0][i - 1] + e[0][i] <= W && e[1][i - 1] + e[1][i] <= W) {
+				c[i + 1] = Math.min(c[i + 1], c[i - 1] + 2);
+			}
+			if (i < N - 1) {
+				a[i + 1] = c[i + 1] + 1;
+				b[i + 1] = c[i + 1] + 1;
+				if (e[0][i] + e[0][i + 1] <= W) {
+					a[i + 1] = Math.min(a[i + 1], b[i] + 1);
+				}
+				if (e[1][i] + e[1][i + 1] <= W) {
+					b[i + 1] = Math.min(b[i + 1], a[i] + 1);
+				}
+			}
+		}
 	}
 }
