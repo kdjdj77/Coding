@@ -27,87 +27,58 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, W, e[][];
-	static int[] a, b, c;
+	static int N, W, a[], b[], c[], e[][];
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 		int T = Integer.parseInt(br.readLine());
-		
 		for(int i = 0; i < T; i++) {
-			int result = 2147483647;
-			String[] temp = br.readLine().split(" ");
-			N = Integer.parseInt(temp[0]);
-			W = Integer.parseInt(temp[1]);
+			int res = Integer.MAX_VALUE;
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
 			e = new int[2][N];
-			
 			for(int j = 0; j < 2; j++) {
-				temp = br.readLine().split(" ");
-				for(int k = 0; k < N; k++) {
-					e[j][k] = Integer.parseInt(temp[k]);
-				}
+				st = new StringTokenizer(br.readLine());
+				for(int k = 0; k < N; k++) e[j][k] = Integer.parseInt(st.nextToken());
 			}
-			
 			a = new int[N];
 			b = new int[N];
 			c = new int[N + 1];
+			a[0] = b[0] = 1;
+			calc(0);
 			
-			a[0] = 1;
-			b[0] = 1;
-			c[0] = 0;
-			
-			solve(0);
-			
-			result = Math.min(result, c[N]);
+			res = Math.min(res, c[N]);
 			if (N > 1) {
-				if (e[0][0] + e[0][N - 1] <= W && e[1][0] + e[1][N - 1] <= W) {
-					a[1] = 1;
-					b[1] = 1;
-					c[1] = 0;
-					solve(1);
-					
-					result = Math.min(result, c[N - 1] + 2);
+				if (e[0][0] + e[0][N-1] <= W && e[1][0] + e[1][N-1] <= W) {
+					a[1] = 1; b[1] = 1; c[1] = 0;
+					calc(1);
+					res = Math.min(res, c[N-1] + 2);
 				}
-				if (e[0][0] + e[0][N - 1] <= W) {
-					a[1] = 2;
-					b[1] = e[1][0] + e[1][1] > W ? 2 : 1;
-					c[1] = 1;
-					solve(1);
-					
-					result = Math.min(result, b[N - 1] + 1);
+				if (e[0][0] + e[0][N-1] <= W) {
+					a[1] = 2; b[1] = e[1][0] + e[1][1] > W ? 2 : 1; c[1] = 1;
+					calc(1);
+					res = Math.min(res, b[N-1] + 1);
 				}
-				if (e[1][0] + e[1][N - 1] <= W) {
-					a[1] = e[0][0] + e[0][1] > W ? 2 : 1;
-					b[1] = 2;
-					c[1] = 1;
-					solve(1);
-					
-					result = Math.min(result, a[N - 1] + 1);
+				if (e[1][0] + e[1][N-1] <= W) {
+					a[1] = e[0][0] + e[0][1] > W ? 2 : 1; b[1] = 2; c[1] = 1;
+					calc(1);
+					res = Math.min(res, a[N-1] + 1);
 				}
 			}
-			
-			System.out.println(result);
+			System.out.print(res);
 		}
-		
-		br.close();
 	}
-	static void solve(int num) {
-		for (int i = num; i < N; i++) {
-			c[i + 1] = Math.min(a[i] + 1, b[i] + 1);
-			if (e[0][i] + e[1][i] <= W) {
-				c[i + 1] = Math.min(c[i + 1], c[i] + 1);
-			}
-			if (i > 0 && e[0][i - 1] + e[0][i] <= W && e[1][i - 1] + e[1][i] <= W) {
+	static void calc(int num) {
+		for(int i = num; i < N; i++) {
+			c[i+1] = Math.min(a[i] + 1, b[i] + 1);
+			if (e[0][i] + e[1][i] <= W) c[i + 1] = Math.min(c[i + 1], c[i] + 1);
+			if (i > 0 && e[0][i-1] + e[0][i] <= W && e[1][i-1] + e[1][i] <= W)
 				c[i + 1] = Math.min(c[i + 1], c[i - 1] + 2);
-			}
-			if (i < N - 1) {
-				a[i + 1] = c[i + 1] + 1;
-				b[i + 1] = c[i + 1] + 1;
-				if (e[0][i] + e[0][i + 1] <= W) {
-					a[i + 1] = Math.min(a[i + 1], b[i] + 1);
-				}
-				if (e[1][i] + e[1][i + 1] <= W) {
-					b[i + 1] = Math.min(b[i + 1], a[i] + 1);
-				}
+			if (i < N-1) {
+				b[i+1] = a[i+1] = c[i+1] + 1;
+				if (e[0][i] + e[0][i+1] <= W) a[i+1] = Math.min(a[i+1], b[i] + 1);
+				if (e[1][i] + e[1][i+1] <= W) b[i+1] = Math.min(b[i+1], a[i] + 1);
 			}
 		}
 	}
