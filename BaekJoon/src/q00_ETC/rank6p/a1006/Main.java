@@ -30,6 +30,7 @@ public class Main {
 	static int N, W, a[], b[], c[], e[][];
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 		int T = Integer.parseInt(br.readLine());
 		for(int i = 0; i < T; i++) {
@@ -66,15 +67,16 @@ public class Main {
 					res = Math.min(res, a[N-1] + 1);
 				}
 			}
-			System.out.print(res);
+			sb.append(res).append("\n");
 		}
+		System.out.print(sb);
 	}
 	static void calc(int num) {
 		for(int i = num; i < N; i++) {
 			c[i+1] = Math.min(a[i] + 1, b[i] + 1);
-			if (e[0][i] + e[1][i] <= W) c[i + 1] = Math.min(c[i + 1], c[i] + 1);
+			if (e[0][i] + e[1][i] <= W) c[i+1] = Math.min(c[i+1], c[i] + 1);
 			if (i > 0 && e[0][i-1] + e[0][i] <= W && e[1][i-1] + e[1][i] <= W)
-				c[i + 1] = Math.min(c[i + 1], c[i - 1] + 2);
+				c[i+1] = Math.min(c[i+1], c[i-1] + 2);
 			if (i < N-1) {
 				b[i+1] = a[i+1] = c[i+1] + 1;
 				if (e[0][i] + e[0][i+1] <= W) a[i+1] = Math.min(a[i+1], b[i] + 1);
