@@ -43,9 +43,7 @@ public class Main {
 				st = new StringTokenizer(br.readLine());
 				for(int k = 0; k < N; k++) e[j][k] = Integer.parseInt(st.nextToken());
 			}
-			a = new int[N];
-			b = new int[N];
-			c = new int[N + 1];
+			a = new int[N]; b = new int[N]; c = new int[N + 1];
 			a[0] = b[0] = 1;
 			calc(0);
 			
