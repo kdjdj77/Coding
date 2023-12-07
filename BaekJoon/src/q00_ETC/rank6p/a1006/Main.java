@@ -34,8 +34,7 @@ public class Main {
 		int T = fr.in();
 		while(T-- > 0) {
 			int res = Integer.MAX_VALUE;
-			N = fr.in(); W = fr.in();
-			e = new int[2][N];
+			e = new int[2][N = fr.in()]; W = fr.in();
 			
 			for(int j = 0; j < 2; j++) for(int k = 0; k < N; k++) e[j][k] = fr.in();
 			a = new int[N]; b = new int[N]; c = new int[N+1];
@@ -61,9 +60,7 @@ public class Main {
 		}
 		System.out.print(sb);
 	}
-	static void set(int n1, int n2, int n3) {
-		a[1] = n1; b[1] = n2; c[1] = n3; calc(1);
-	}
+	static void set(int n1, int n2, int n3) {a[1] = n1; b[1] = n2; c[1] = n3; calc(1);}
 	static void calc(int n) {
 		for(int i = n; i < N; i++) {
 			c[i+1] = Math.min(a[i] + 1, b[i] + 1);
