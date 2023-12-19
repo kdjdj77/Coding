@@ -31,14 +31,37 @@ ai = 0인 경우는 없다.
  */
 
 import java.io.*;
+import java.math.*;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
+        int N = Integer.parseInt(br.readLine());
         
-        
+        List<BigInteger> res = new ArrayList<BigInteger>();
+        BigInteger minM = BigInteger.ZERO, before = BigInteger.ZERO;
+        while(N-- > 0) {
+        	StringTokenizer st = new StringTokenizer(br.readLine());
+        	BigInteger a = new BigInteger(st.nextToken()), b = new BigInteger(st.nextToken());
+        	BigInteger diff = b.subtract(before.add(a));
+        	before = b;
+        	
+        	if (a.signum() > 0 || diff.signum() == 0) continue;
+        	if (minM.signum() < 0 || minM.compareTo(b) < 0) minM = b;
+        	
+        	if (res.size() == 0) res = calc(diff, minM);
+        	else res.retainAll(calc(diff, minM));
+        }
+        System.out.print(res.get(0));
+    }
+    static List<BigInteger> calc(BigInteger diff, BigInteger minM) {
+    	List<BigInteger> res = new ArrayList<BigInteger>();
+    	for(BigInteger i = BigInteger.ONE;;i = i.add(BigInteger.ONE)) {
+    		if (!diff.remainder(i).equals(BigInteger.ZERO)) continue;
+    		BigInteger d = diff.divide(i);
+    		if (d.compareTo(minM) < 0) return res;
+    		res.add(d);
+    	}
     }
 }
