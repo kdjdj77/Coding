@@ -39,7 +39,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         
-        List<BigInteger> res = new ArrayList<BigInteger>();
+        List<BigInteger> res = null;
         BigInteger minM = BigInteger.ZERO, before = BigInteger.ZERO;
         while(N-- > 0) {
         	StringTokenizer st = new StringTokenizer(br.readLine());
@@ -50,10 +50,10 @@ public class Main {
         	if (a.signum() > 0 || diff.signum() == 0) continue;
         	if (minM.signum() < 0 || minM.compareTo(b) < 0) minM = b;
         	
-        	if (res.size() == 0) res = calc(diff, minM);
+        	if (res == null) res = calc(diff, minM);
         	else res.retainAll(calc(diff, minM));
         }
-        System.out.print(res.get(0));
+        System.out.print(res.size() == 0 ? -1 : res.get(0));
     }
     static List<BigInteger> calc(BigInteger diff, BigInteger minM) {
     	List<BigInteger> res = new ArrayList<BigInteger>();
