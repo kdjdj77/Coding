@@ -31,37 +31,38 @@ ai = 0인 경우는 없다.
  */
 
 import java.io.*;
-import java.math.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st;
+
         int N = Integer.parseInt(br.readLine());
-        
-        List<BigInteger> res = null;
-        BigInteger minM = BigInteger.ZERO, before = BigInteger.ZERO;
-        while(N-- > 0) {
-        	StringTokenizer st = new StringTokenizer(br.readLine());
-        	BigInteger a = new BigInteger(st.nextToken()), b = new BigInteger(st.nextToken());
-        	BigInteger diff = b.subtract(before.add(a));
-        	before = b;
-        	
-        	if (a.signum() > 0 || diff.signum() == 0) continue;
-        	if (minM.signum() < 0 || minM.compareTo(b) < 0) minM = b;
-        	
-        	if (res == null) res = calc(diff, minM);
-        	else res.retainAll(calc(diff, minM));
+        long a, b, minB = (long) 10e18, balance = 0, M = 0;
+
+        boolean valid = true;
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            a = Long.parseLong(st.nextToken());
+            b = Long.parseLong(st.nextToken());
+
+            if (balance + a < 0) {
+                long temp = b - a - balance;
+                if (b != 0 && b < minB) minB = b;
+                if (M == 0) M = temp;
+                else if ((M = GCD(M, temp)) <= minB && minB != (long) 10e18) {valid = false; break;}
+            } else if (balance + a != b) {valid = false; break;}
+            balance = b;
         }
-        System.out.print(res.size() == 0 ? -1 : res.get(0));
+ 
+        if (valid && M != 0) sb.append(M).append("\n");
+        else sb.append(valid && M == 0 ? "1\n" : "-1\n");
+        System.out.print(sb);
     }
-    static List<BigInteger> calc(BigInteger diff, BigInteger minM) {
-    	List<BigInteger> res = new ArrayList<BigInteger>();
-    	for(BigInteger i = BigInteger.ONE;;i = i.add(BigInteger.ONE)) {
-    		if (!diff.remainder(i).equals(BigInteger.ZERO)) continue;
-    		BigInteger d = diff.divide(i);
-    		if (d.compareTo(minM) < 0) return res;
-    		res.add(d);
-    	}
+    public static long GCD(long a, long b) {
+        while (b > 0) {long tmp = a; a = b; b = tmp % b;}
+        return a;
     }
 }
