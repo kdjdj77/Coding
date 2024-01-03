@@ -34,35 +34,28 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
+	static long MAX = Long.MAX_VALUE;
+	public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
-
         int N = Integer.parseInt(br.readLine());
-        long a, b, minB = (long) 10e18, balance = 0, M = 0;
-
-        boolean valid = true;
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            a = Long.parseLong(st.nextToken());
-            b = Long.parseLong(st.nextToken());
-
-            if (balance + a < 0) {
-                long temp = b - a - balance;
-                if (b != 0 && b < minB) minB = b;
-                if (M == 0) M = temp;
-                else if ((M = GCD(M, temp)) <= minB && minB != (long) 10e18) {valid = false; break;}
-            } else if (balance + a != b) {valid = false; break;}
-            balance = b;
+        long min = MAX, remain = 0, M = 0;
+        boolean error = false;
+        while(N-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            long a = Long.parseLong(st.nextToken()), b = Long.parseLong(st.nextToken());
+            if (remain + a < 0) {
+                long calc = b - a - remain;
+                if (b != 0 && b < min) min = b;
+                
+                if (M == 0) M = calc;
+                else if ((M = gcd(M, calc)) <= min && min != MAX) {error = true; break;}
+            } else if (b != remain + a) {error = true; break;}
+            remain = b;
         }
- 
-        if (valid && M != 0) sb.append(M).append("\n");
-        else sb.append(valid && M == 0 ? "1\n" : "-1\n");
-        System.out.print(sb);
+        System.out.print(error ? -1 : M != 0 ? M : 1);
     }
-    public static long GCD(long a, long b) {
-        while (b > 0) {long tmp = a; a = b; b = tmp % b;}
+    static long gcd(long a, long b) {
+        while(b > 0) {long tmp = a; a = b; b = tmp % b;}
         return a;
     }
 }
