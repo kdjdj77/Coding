@@ -27,8 +27,18 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static boolean[][] isW;
 	public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
+        isW = new boolean[N][M];
+        for(int i = 0; i < N; i++) {
+        	String line = br.readLine();
+        	for(int j = 0; j < M; j++) isW[i][j] = line.charAt(j) == 'W';
+        }
+        
+        
         
     }
 }
