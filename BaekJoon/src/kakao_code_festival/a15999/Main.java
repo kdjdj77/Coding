@@ -27,11 +27,13 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int N, M;
 	static boolean[][] isW;
 	public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
         isW = new boolean[N][M];
         for(int i = 0; i < N; i++) {
         	String line = br.readLine();
@@ -43,5 +45,13 @@ public class Main {
     }
 	static void dfs() {
 		
+	}
+	static boolean[][] pick(boolean[][] map, int x, int y) {
+		if (x > 0 && !map[x-1][y]^map[x][y]) map[x-1][y] = !map[x-1][y];
+		if (y > 0 && !map[x][y-1]^map[x][y]) map[x][y-1] = !map[x][y-1];
+		if (x < N-1 && !map[x+1][y]^map[x][y]) map[x+1][y] = !map[x+1][y];
+		if (y < M-1 && !map[x][y+1]^map[x][y]) map[x][y+1] = !map[x][y+1];
+		map[x][y] = !map[x][y];
+		return map;
 	}
 }
