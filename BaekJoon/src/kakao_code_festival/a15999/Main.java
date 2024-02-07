@@ -27,31 +27,20 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, M;
-	static boolean[][] isW;
 	public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        isW = new boolean[N][M];
-        for(int i = 0; i < N; i++) {
-        	String line = br.readLine();
-        	for(int j = 0; j < M; j++) isW[i][j] = line.charAt(j) == 'W';
-        }
-        
-        
-        
-    }
-	static void dfs() {
-
-	}
-	static boolean[][] pick(boolean[][] map, int x, int y) {
-		if (x > 0 && !map[x-1][y]^map[x][y]) map[x-1][y] = !map[x-1][y];
-		if (y > 0 && !map[x][y-1]^map[x][y]) map[x][y-1] = !map[x][y-1];
-		if (x < N-1 && !map[x+1][y]^map[x][y]) map[x+1][y] = !map[x+1][y];
-		if (y < M-1 && !map[x][y+1]^map[x][y]) map[x][y+1] = !map[x][y+1];
-		map[x][y] = !map[x][y];
-		return map;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+	    int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
+	    int dy[] = {-1, 1, 0, 0}, dx[] = {0, 0, -1, 1}, MOD = 1000000007, cnt = 0;
+	    char[][] adj = new char[N][M];
+	    for(int i = 0; i < N; i++) adj[i] = br.readLine().toCharArray();
+	    for(int i = 0; i < N; i++) for(int j = 0; j < M; j++) for(int k = 0; k < 4; k++) {
+            int ny = i + dy[k], nx = j + dx[k];
+            if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
+            if (adj[i][j] != adj[ny][nx]) {cnt++; break;}
+	    }
+	    int res = 1;
+	    for(int i = 0; i < N*M-cnt; i++) res = (res*2)%MOD;
+	    System.out.print(res);
 	}
 }
