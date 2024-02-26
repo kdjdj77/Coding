@@ -22,9 +22,9 @@ public class Main {
 		int res = (int)(max-min) + 1;
 		boolean[] check = new boolean[res];
 		for(long i = 2; i*i <= max; i++) {
-			long pow = i*i, tmp = min/pow;
-			if (min%pow != 0) tmp += 1;
-			for(long j = tmp; j*pow <= max; j++) {
+			long pow = i*i, k = min/pow;
+			if (min%pow != 0) k += 1;
+			for(long j = k; j*pow <= max; j++) {
 				int pos = (int)(j*pow-min);
 				if (!check[pos]) {check[pos] = true; res--;}
 			}
